@@ -7,45 +7,82 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <style>
         body { 
-            background-color: #0A1A2F; 
-            color: white; 
+            background-color: #F4F1EA; /* Muted beige background */
+            color: #3D3D3D; /* Dark vintage text */
             text-align: center; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
             height: 100vh; 
             padding: 2rem;
+            font-family: 'Georgia', serif; /* Vintage typography */
         }
         .container {
             max-width: 600px;
             margin: auto;
         }
-        h1 { font-size: 2.5rem; }
+        h1 { font-size: 2.5rem; color: #2C2C2C; }
         p { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        input[type="email"] {
+            border: 2px solid #3D3D3D;
+            padding: 0.5rem;
+            font-size: 1rem;
+            width: 80%;
+            text-align: center;
+            background-color: #FFF8F0; /* Soft white */
+        }
         .cta {
-            background-color: #FF6B35;
+            background-color: #C97B5A; /* Soft vintage orange */
             padding: 0.8rem 1.5rem;
             border-radius: 5px;
             display: inline-block;
             color: white;
             text-decoration: none;
             font-weight: bold;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
         }
-        .social a { margin: 0 10px; font-size: 1.5rem; color: white; text-decoration: none; }
+        .cta:hover {
+            background-color: #A65E41; /* Darker orange on hover */
+        }
+        .social a {
+            margin: 0 10px; 
+            font-size: 1.2rem; 
+            color: #3D3D3D; 
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .social a:hover { color: #A65E41; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Coming Soon</h1>
         <p>Dry Skateboards is almost here. Stay tuned for the launch!</p>
-        <form>
-            <input type="email" placeholder="Enter your email" required>
-            <button type="submit" onclick="event.preventDefault()" class="cta">Notify Me</button>
+        <form onsubmit="storeEmail(event)">
+            <input type="email" id="email" placeholder="Enter your email" required pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+">
+            <button type="submit" class="cta">Notify Me</button>
         </form>
         <div class="social">
-            <a href="#" target="_blank">📷 Instagram</a>
-            <a href="#" target="_blank">🐦 Twitter</a>
+            <a href="https://instagram.com/dryskateboards" target="_blank">📷 @dryskateboards</a>
         </div>
     </div>
+
+    <script>
+        function storeEmail(event) {
+            event.preventDefault();
+            let emailInput = document.getElementById('email').value;
+            if (emailInput.includes('@')) {
+                let storedEmails = JSON.parse(localStorage.getItem('emails')) || [];
+                storedEmails.push(emailInput);
+                localStorage.setItem('emails', JSON.stringify(storedEmails));
+                alert('Thanks for signing up! We\'ll notify you when we launch.');
+                document.getElementById('email').value = ''; // Clear input field
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+    </script>
 </body>
 </html>
