@@ -109,30 +109,32 @@
     <div id="notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
-        
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwx2Van_3l7475O_Y_vtEt-Kn4DSRRLjmR7mkp7PSKFI9F7Kem6vUfE6_I0aydFoohH/exec"; // Replace with your actual Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzA0QkfN1ap2eBnqoJWM3tmgplH_rWi7PbGk-xidcEr67kh1dmfsBMsqZ8g1KUZ6Jkl/exec"; // Replace with your actual Google Apps Script URL
+
         async function storeEmail(event) {
-            event.preventDefault();
-            let emailInput = document.getElementById('email').value;
+        event.preventDefault();
+        let emailInput = document.getElementById('email').value;
 
-            if (emailInput.includes('@')) {
-                try {
-                    let response = await fetch(GOOGLE_SCRIPT_URL, {
-                        method: "POST",
-                        body: JSON.stringify({ email: emailInput }),
-                        headers: { "Content-Type": "application/json" }
-                    });
+        if (emailInput.includes('@')) {
+            try {
+                let response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ email: emailInput }),
+                    headers: { "Content-Type": "application/json" },
+                    mode: "cors"  // Important: Enable CORS mode
+                });
 
-                    let result = await response.text();
-                    alert(result); // Displays success message from Google Apps Script
-                    document.getElementById('email').value = ''; // Clear input field
-                } catch (error) {
-                    alert("Error saving email. Please try again later.");
-                }
-            } else {
-                alert('Please enter a valid email.');
+                let result = await response.json();
+                alert(result.result); // Show success message from Google Apps Script
+                document.getElementById('email').value = ''; // Clear input field
+            } catch (error) {
+                alert("Error saving email. Please try again later.");
+                console.error("Fetch error:", error);
             }
+        } else {
+            alert('Please enter a valid email.');
         }
+    }
         function copyEmailToClipboard() {
             const email = "dryskateboards@proton.me";
             navigator.clipboard.writeText(email).then(() => {
