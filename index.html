@@ -24,6 +24,9 @@
             max-width: 600px;
             margin: auto;
         }
+        .logo {
+            width: 400px; /* Adjust the width as needed */
+        }    
         h1 { font-size: 2.5rem; color: #FFF; }
         p { font-size: 1.2rem; margin-bottom: 1.5rem; color: #FFF; }
         input[type="email"] {
@@ -33,13 +36,17 @@
             width: 80%;
             text-align: center;
             background-color: rgba(255, 255, 255, 0.8); /* Soft white with transparency */
-            color: #0000; /* Dark text color for input */
+            color: #5D4037; /* Dark brown color for input text */
         }
         .cta {
             border: none;
+            width: 50%;
+            text-align: center;
             cursor: pointer;
             background-color: #A65E41; /* Darker orange */
             color: #FFF; /* Light text color */
+            margin: 1rem auto; /* Center the button */
+            display: block; /* Ensure the button is a block element */
         }
         .cta:hover {
             background-color: #8B4E35; /* Even darker orange on hover */
@@ -66,10 +73,24 @@
             border-radius: 5px;
             transition: width 2s;
         }
+        .notification {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            border-radius: 2px;
+            padding: 10px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <img src="assets/logoWhite.svg" alt="Dry Skateboards Logo" class="logo">
         <h1>Coming Soon</h1>
         <div class="loading-bar">
             <div class="loading-bar-inner"></div>
@@ -81,8 +102,10 @@
         </form>
         <div class="social">
             <a href="https://instagram.com/dryskateboards" target="_blank">📷 @dryskateboards</a>
+            <a href="#" onclick="copyEmailToClipboard()">📧 Email Us</a>
         </div>
     </div>
+    <div id="notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
         function storeEmail(event) {
@@ -97,6 +120,17 @@
             } else {
                 alert('Please enter a valid email address.');
             }
+        }
+
+        function copyEmailToClipboard() {
+            const email = "dryskateboards@proton.me";
+            navigator.clipboard.writeText(email).then(() => {
+                const notification = document.getElementById('notification');
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            });
         }
 
         window.onload = function() {
