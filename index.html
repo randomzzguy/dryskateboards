@@ -11,7 +11,7 @@
             background-image: url('assets/bg.png'); /* Background image */
             background-size: cover; /* Cover the entire background */
             background-position: center; /* Center the background image */
-            color: #F4F1EA; /* Dark vintage text */
+            color: #3D3D3D; /* Dark vintage text */
             text-align: center; 
             display: flex; 
             flex-direction: column; 
@@ -19,12 +19,13 @@
             height: 100vh; 
             padding: 2rem;
             font-family: 'Georgia', serif; /* Vintage typography */
+            backdrop-filter: blur(5px); /* Blur effect */
         }
         .container {
             max-width: 600px;
             margin: auto;
         }
-        h1 { font-size: 2.5rem; color: #F4F1EA; }
+        h1 { font-size: 2.5rem; color: #2C2C2C; }
         p { font-size: 1.2rem; margin-bottom: 1.5rem; }
         input[type="email"] {
             border: 2px solid #3D3D3D;
@@ -35,14 +36,6 @@
             background-color: #FFF8F0; /* Soft white */
         }
         .cta {
-            background-color: #C97B5A; /* Soft vintage orange */
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            display: inline-block;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
             border: none;
             cursor: pointer;
         }
@@ -57,11 +50,28 @@
             font-weight: bold;
         }
         .social a:hover { color: #A65E41; }
+        .loading-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .loading-bar-inner {
+            width: 0;
+            height: 20px;
+            background-color: #A65E41;
+            border-radius: 5px;
+            transition: width 2s;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Coming Soon</h1>
+        <div class="loading-bar">
+            <div class="loading-bar-inner"></div>
+        </div>
         <p>Dry Skateboards is almost here. Stay tuned for the launch!</p>
         <form onsubmit="storeEmail(event)">
             <input type="email" id="email" placeholder="Enter your email" required pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+">
@@ -77,14 +87,12 @@
             event.preventDefault();
             let emailInput = document.getElementById('email').value;
             if (emailInput.includes('@')) {
-                let storedEmails = JSON.parse(localStorage.getItem('emails')) || [];
-                storedEmails.push(emailInput);
-                localStorage.setItem('emails', JSON.stringify(storedEmails));
-                alert('Thanks for signing up! We\'ll notify you when we launch.');
-                document.getElementById('email').value = ''; // Clear input field
-            } else {
-                alert('Please enter a valid email address.');
+                // Store email logic here
             }
+        }
+
+        window.onload = function() {
+            document.querySelector('.loading-bar-inner').style.width = '70%';
         }
     </script>
 </body>
