@@ -109,7 +109,7 @@
     <div id="notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzA0QkfN1ap2eBnqoJWM3tmgplH_rWi7PbGk-xidcEr67kh1dmfsBMsqZ8g1KUZ6Jkl/exec"; // Replace with your actual Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJwtK12ASc7ObTVh9u2MRTpEgGC9OwCa9JSw4UIun6UcD-GDz8yrgcMAqZs60FsINO/exec"; // Replace with your actual Google Apps Script URL
 
         async function storeEmail(event) {
         event.preventDefault();
@@ -135,6 +135,7 @@
             alert('Please enter a valid email.');
         }
     }
+
         function copyEmailToClipboard() {
             const email = "dryskateboards@proton.me";
             navigator.clipboard.writeText(email).then(() => {
