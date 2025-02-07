@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dry Skateboards - Coming Soon</title>
+    <title>Dry Skateboards - Soon</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <link rel="icon" type="image/svg+xml" href="assets/logoWhite.svg">
+    
+    <!-- Custom Vintage Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    
     <style>
-        body { 
-            background-color: rgba(166, 94, 65, 0.9); /* Darker orange with transparency */
-            background-image: url('assets/bg.png'); /* Background image */
+        /* Global Font */
+        body {
+            background-image: url('assets/bg.png');
             background-size: cover;
             background-position: center;
             color: #F4F1EA;
@@ -19,17 +23,48 @@
             justify-content: center;
             height: 100vh;
             padding: 2rem;
-            font-family: 'Georgia', serif;
+            font-family: 'Bungee', cursive;
+            cursor: url('assets/cursor.png') 8 8, auto; /* Smaller cursor */
         }
+
+        /* Custom Clickable Cursor */
+        a, button, input {
+            cursor: url('assets/cursorClick.png') 8 8, pointer;
+        }
+
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: auto;
+        }
+
+        /* Neon Glow Effect on Logo */
+        @keyframes neonGlow {
+            0% { filter: drop-shadow(0 0 5px #ffbd59); }
+            50% { filter: drop-shadow(0 0 15px #ffbd59); }
+            100% { filter: drop-shadow(0 0 5px #ffbd59); }
         }
         .logo {
             width: 400px;
+            animation: neonGlow 2s infinite alternate;
         }    
-        h1 { font-size: 2.5rem; color: #FFF; }
-        p { font-size: 1.2rem; margin-bottom: 1.5rem; color: #FFF; }
+
+        h1, h3, p, button {
+            color: #FFF;
+        }
+
+        /* Apply Font to Specific Headings */
+        .title {
+            font-family: 'Bungee', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .countdown-title {
+            font-family: 'Bungee', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+        
         input[type="email"] {
             border: 2px solid #F4F1EA;
             padding: 0.5rem;
@@ -39,41 +74,90 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: #5D4037;
         }
+
         .cta {
             border: none;
             width: 50%;
             text-align: center;
             cursor: pointer;
-            background-color: #A65E41;
+            background-color: #ffbd59;
             color: #FFF;
             margin: 1rem auto;
             display: block;
         }
         .cta:hover {
-            background-color: #8B4E35;
+            background-color: #A65E41;
         }
+
         .social a {
             margin: 0 10px;
-            font-size: 1.2rem;
+            font-size: 0.85rem;
             color: #F4F1EA;
             text-decoration: none;
-            font-weight: bold;
         }
-        .social a:hover { color: #FFF; }
+        .social a:hover { color: #ffbd59; }
+
+        /* Space Between Countdown & Text */
+        #countdown-timer {
+            font-size: 2rem;
+            color: #ffbd59;
+            margin-bottom: 20px;
+        }
+
+        /* Trick-Loading Bar with Grinding Skater */
+        .loading-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .loading-bar-label {
+            font-size: 1rem;
+            margin: 0 10px;
+            color: #ffbd59;
+        }
+
         .loading-bar {
             width: 100%;
             background-color: #ddd;
             border-radius: 5px;
             overflow: hidden;
             margin: 1rem 0;
+            position: relative;
+            height: 40px; /* Increased height for skater visibility */
+            display: flex;
+            align-items: center;
         }
+
+        .loading-skater {
+            position: absolute;
+            left: 0;
+            top: 1px;
+            width: 38px; /* Larger skater */
+            height: auto;
+            animation: skaterMove 3s linear forwards;
+        }
+
         .loading-bar-inner {
-            width: 0;
-            height: 20px;
-            background-color: rgba(166, 94, 65, 0.9);
+            width: 0%;
+            height: 100%;
+            background-color: #ffbd59;
             border-radius: 5px;
-            transition: width 2s;
+            animation: barFill 3s linear forwards;
         }
+
+        @keyframes skaterMove {
+            0% { left: 0%; }
+            100% { left: 70%; } /* Stops at 70% */
+        }
+
+        @keyframes barFill {
+            0% { width: 0%; }
+            100% { width: 70%; } /* Matches skater movement */
+        }
+
+        /* Smooth Fade-in Notification */
         .notification {
             display: none;
             background-color: #4CAF50;
@@ -96,74 +180,74 @@
 <body>
     <div class="container">
         <img src="assets/logoWhite.svg" alt="Dry Skateboards Logo" class="logo">
-        <h1>Coming Soon</h1>
-        <div class="loading-bar">
-            <div class="loading-bar-inner"></div>
+        <h1 class="title">New decks, fresh threads—<br>coming soon!</h1>
+
+        <div class="loading-bar-container">
+            <span class="loading-bar-label">0%</span>
+            <div class="loading-bar">
+                <img src="assets/skater.png" alt="Skateboarder" class="loading-skater">
+                <div class="loading-bar-inner"></div>
+            </div>
+            <span class="loading-bar-label">100%</span>
         </div>
-        <p>Dry Skateboards is almost here. Stay tuned for the launch!</p>
+        
+        <br><br>
+
+        <!-- Countdown Timer -->
+        <h3 class="countdown-title">Launching In:</h3>
+        <div id="countdown-timer"></div>
+
+        <p>Get notified below!</p>
+
         <form onsubmit="storeEmail(event)">
-            <input type="email" id="email" placeholder="Enter your email" required pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+">
+            <input type="email" id="email" placeholder="Enter your email" required>
             <button type="submit" class="cta">Notify Me</button>
         </form>
+
         <div class="social">
             <a href="https://instagram.com/dryskateboards" target="_blank">📷 @dryskateboards</a>
             <a href="#" onclick="copyEmailToClipboard()">📧 Email Us</a>
         </div>
     </div>
-    
-    <!-- Notification Message -->
+
     <div id="email-notification" class="notification">Email successfully submitted!</div>
     <div id="copy-notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIk_TkrfZ7T3fp7b5OL1X8Fz_g0sIm7NV2ei1EdeOJI0Ofga6IGTUI7zf4SS0lGXLE/exec"; // Replace with your actual Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIk_TkrfZ7T3fp7b5OL1X8Fz_g0sIm7NV2ei1EdeOJI0Ofga6IGTUI7zf4SS0lGXLE/exec";
 
         async function storeEmail(event) {
             event.preventDefault();
             let emailInput = document.getElementById('email').value;
 
             if (emailInput.includes('@')) {
-                try {
-                    let response = await fetch(GOOGLE_SCRIPT_URL, {
-                        method: "POST",
-                        body: JSON.stringify({ email: emailInput }),
-                        headers: { "Content-Type": "application/json" },
-                        mode: "no-cors"
-                    });
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ email: emailInput }),
+                    headers: { "Content-Type": "application/json" },
+                    mode: "no-cors"
+                });
 
-                    showNotification("email-notification"); // Show notification
-                    document.getElementById('email').value = ''; // Clear input field
-                } catch (error) {
-                    alert("Error saving email. Please try again later.");
-                    console.error("Fetch error:", error);
-                }
-            } else {
-                alert('Please enter a valid email.');
+                showNotification("email-notification");
+                document.getElementById('email').value = '';
             }
         }
 
         function copyEmailToClipboard() {
-            const email = "dryskateboards@proton.me";
-            navigator.clipboard.writeText(email).then(() => {
+            navigator.clipboard.writeText("dryskateboards@proton.me").then(() => {
                 showNotification("copy-notification");
             });
         }
 
-        function showNotification(id) {
-            const notification = document.getElementById(id);
-            notification.style.display = 'block';
-            notification.style.opacity = '1';
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 500);
-            }, 3000);
+        function updateCountdown() {
+            const launchDate = new Date("February 12, 2025 12:00:00").getTime();
+            const now = new Date().getTime();
+            const timeLeft = launchDate - now;
+            document.getElementById("countdown-timer").innerHTML =
+                `${Math.floor(timeLeft / 86400000)}d : ${Math.floor((timeLeft / 3600000) % 24)}h : 
+                 ${Math.floor((timeLeft / 60000) % 60)}m : ${Math.floor((timeLeft / 1000) % 60)}s`;
         }
-
-        window.onload = function() {
-            document.querySelector('.loading-bar-inner').style.width = '70%';
-        }
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
