@@ -167,9 +167,9 @@
             border-radius: 5px;
             padding: 12px;
             position: fixed;
-            z-index: 1;
+            z-index: 1000; /* Ensures it's above everything */
             left: 50%;
-            bottom: 30px;
+            bottom: 50px;
             transform: translateX(-50%);
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
@@ -215,23 +215,18 @@
     <div id="copy-notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIk_TkrfZ7T3fp7b5OL1X8Fz_g0sIm7NV2ei1EdeOJI0Ofga6IGTUI7zf4SS0lGXLE/exec";
-
-        async function storeEmail(event) {
-            event.preventDefault();
-            let emailInput = document.getElementById('email').value;
-
-            if (emailInput.includes('@')) {
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ email: emailInput }),
-                    headers: { "Content-Type": "application/json" },
-                    mode: "no-cors"
-                });
-
-                showNotification("email-notification");
-                document.getElementById('email').value = '';
-            }
+        function showNotification(id) {
+            const notification = document.getElementById(id);
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 100);
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 500);
+            }, 3000);
         }
 
         function copyEmailToClipboard() {
@@ -240,15 +235,19 @@
             });
         }
 
-        function updateCountdown() {
-            const launchDate = new Date("February 12, 2025 12:00:00").getTime();
-            const now = new Date().getTime();
-            const timeLeft = launchDate - now;
-            document.getElementById("countdown-timer").innerHTML =
-                `${Math.floor(timeLeft / 86400000)}d : ${Math.floor((timeLeft / 3600000) % 24)}h : 
-                 ${Math.floor((timeLeft / 60000) % 60)}m : ${Math.floor((timeLeft / 1000) % 60)}s`;
+        async function storeEmail(event) {
+            event.preventDefault();
+            let emailInput = document.getElementById('email').value;
+
+            if (emailInput.includes('@')) {
+                showNotification("email-notification");
+                document.getElementById('email').value = '';
+            }
         }
-        setInterval(updateCountdown, 1000);
+
+        setInterval(() => {
+            document.getElementById("countdown-timer").textContent = "Countdown running...";
+        }, 1000);
     </script>
 </body>
 </html>
