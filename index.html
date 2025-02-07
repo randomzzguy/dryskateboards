@@ -10,23 +10,23 @@
         body { 
             background-color: rgba(166, 94, 65, 0.9); /* Darker orange with transparency */
             background-image: url('assets/bg.png'); /* Background image */
-            background-size: cover; /* Cover the entire background */
-            background-position: center; /* Center the background image */
-            color: #F4F1EA; /* Light text color */
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            height: 100vh; 
+            background-size: cover;
+            background-position: center;
+            color: #F4F1EA;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
             padding: 2rem;
-            font-family: 'Georgia', serif; /* Vintage typography */
+            font-family: 'Georgia', serif;
         }
         .container {
             max-width: 600px;
             margin: auto;
         }
         .logo {
-            width: 400px; /* Adjust the width as needed */
+            width: 400px;
         }    
         h1 { font-size: 2.5rem; color: #FFF; }
         p { font-size: 1.2rem; margin-bottom: 1.5rem; color: #FFF; }
@@ -36,26 +36,26 @@
             font-size: 1rem;
             width: 80%;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.8); /* Soft white with transparency */
-            color: #5D4037; /* Dark brown color for input text */
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #5D4037;
         }
         .cta {
             border: none;
             width: 50%;
             text-align: center;
             cursor: pointer;
-            background-color: #A65E41; /* Darker orange */
-            color: #FFF; /* Light text color */
-            margin: 1rem auto; /* Center the button */
-            display: block; /* Ensure the button is a block element */
+            background-color: #A65E41;
+            color: #FFF;
+            margin: 1rem auto;
+            display: block;
         }
         .cta:hover {
-            background-color: #8B4E35; /* Even darker orange on hover */
+            background-color: #8B4E35;
         }
         .social a {
-            margin: 0 10px; 
-            font-size: 1.2rem; 
-            color: #F4F1EA; 
+            margin: 0 10px;
+            font-size: 1.2rem;
+            color: #F4F1EA;
             text-decoration: none;
             font-weight: bold;
         }
@@ -70,7 +70,7 @@
         .loading-bar-inner {
             width: 0;
             height: 20px;
-            background-color: rgba(166, 94, 65, 0.9); /* Light color for loading bar */
+            background-color: rgba(166, 94, 65, 0.9);
             border-radius: 5px;
             transition: width 2s;
         }
@@ -79,13 +79,17 @@
             background-color: #4CAF50;
             color: white;
             text-align: center;
-            border-radius: 2px;
-            padding: 10px;
+            border-radius: 5px;
+            padding: 12px;
             position: fixed;
             z-index: 1;
             left: 50%;
             bottom: 30px;
             transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -106,45 +110,55 @@
             <a href="#" onclick="copyEmailToClipboard()">📧 Email Us</a>
         </div>
     </div>
-    <div id="notification" class="notification">E-mail successfully copied to clipboard!</div>
+    
+    <!-- Notification Message -->
+    <div id="email-notification" class="notification">Email successfully submitted!</div>
+    <div id="copy-notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIk_TkrfZ7T3fp7b5OL1X8Fz_g0sIm7NV2ei1EdeOJI0Ofga6IGTUI7zf4SS0lGXLE/exec"; // Replace with your actual Google Apps Script URL
 
         async function storeEmail(event) {
-    event.preventDefault();
-    let emailInput = document.getElementById('email').value;
+            event.preventDefault();
+            let emailInput = document.getElementById('email').value;
 
-    if (emailInput.includes('@')) {
-        try {
-            let response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify({ email: emailInput }),
-                headers: { "Content-Type": "application/json" },
-                mode: "no-cors"  // ✅ Forces Google Apps Script to bypass CORS issues
-            });
+            if (emailInput.includes('@')) {
+                try {
+                    let response = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify({ email: emailInput }),
+                        headers: { "Content-Type": "application/json" },
+                        mode: "no-cors"
+                    });
 
-            alert("Email saved successfully!"); // Response won't be readable due to no-cors
-            document.getElementById('email').value = ''; // Clear input field
-        } catch (error) {
-            alert("Error saving email. Please try again later.");
-            console.error("Fetch error:", error);
+                    showNotification("email-notification"); // Show notification
+                    document.getElementById('email').value = ''; // Clear input field
+                } catch (error) {
+                    alert("Error saving email. Please try again later.");
+                    console.error("Fetch error:", error);
+                }
+            } else {
+                alert('Please enter a valid email.');
+            }
         }
-    } else {
-        alert('Please enter a valid email.');
-    }
-}
-
 
         function copyEmailToClipboard() {
             const email = "dryskateboards@proton.me";
             navigator.clipboard.writeText(email).then(() => {
-                const notification = document.getElementById('notification');
-                notification.style.display = 'block';
+                showNotification("copy-notification");
+            });
+        }
+
+        function showNotification(id) {
+            const notification = document.getElementById(id);
+            notification.style.display = 'block';
+            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '0';
                 setTimeout(() => {
                     notification.style.display = 'none';
-                }, 3000);
-            });
+                }, 500);
+            }, 3000);
         }
 
         window.onload = function() {
