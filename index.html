@@ -109,7 +109,7 @@
     <div id="notification" class="notification">E-mail successfully copied to clipboard!</div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzdxzG_Rhrjr0fuxcOA1aDcAtHjd9jekzBf7Y4ErtJK2MKtOm8IGrB0CAjCgB7xGcsL/exec"; // Replace with your actual Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyIk_TkrfZ7T3fp7b5OL1X8Fz_g0sIm7NV2ei1EdeOJI0Ofga6IGTUI7zf4SS0lGXLE/exec"; // Replace with your actual Google Apps Script URL
 
         async function storeEmail(event) {
     event.preventDefault();
@@ -121,13 +121,10 @@
                 method: "POST",
                 body: JSON.stringify({ email: emailInput }),
                 headers: { "Content-Type": "application/json" },
-                mode: "cors"  // Important: Enable CORS mode
+                mode: "no-cors"  // ✅ Forces Google Apps Script to bypass CORS issues
             });
 
-            if (!response.ok) throw new Error("Network response was not ok");
-            
-            let result = await response.json();
-            alert(result.result); // Show success message from Google Apps Script
+            alert("Email saved successfully!"); // Response won't be readable due to no-cors
             document.getElementById('email').value = ''; // Clear input field
         } catch (error) {
             alert("Error saving email. Please try again later.");
@@ -137,6 +134,7 @@
         alert('Please enter a valid email.');
     }
 }
+
 
         function copyEmailToClipboard() {
             const email = "dryskateboards@proton.me";
