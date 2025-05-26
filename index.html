@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRY SKATEBOARDS | Boards & Street Apparel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <script>
+        // Loading Screen Logic
+    document.addEventListener('DOMContentLoaded', function () {
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingPercent = document.getElementById('loading-percent');
+        const loadingBar = document.getElementById('loading-bar');
+        let percent = 0;
+
+function animateLoading() {
+    percent += Math.random() * 2 + 0.5; // slower increment
+    if (percent > 100) percent = 100;
+    loadingPercent.textContent = Math.floor(percent) + '%';
+    loadingBar.style.width = percent + '%';
+    if (percent < 100) {
+        setTimeout(animateLoading, 60); // slower interval
+    } else {
+        setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => loadingScreen.style.display = 'none', 400);
+        }, 350);
+    }
+}
+        animateLoading();
+    });
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Helvetica', 'Arial', 'sans-serif'],
+                        'display': ['Impact', 'Haettenschweiler', 'Arial Narrow Bold', 'sans-serif'],
+                    },
+                    colors: {
+                        'rad-red': '#ff3131',
+                        'rad-black': '#121212',
+                        'rad-neon': '#39ff14',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f8f8;
+            scroll-behavior: smooth;
+        }
+        
+        .bebas {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        .noise-bg {
+            position: relative;
+        }
+        
+        .noise-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .hero-text {
+            text-shadow: 3px 3px 0px rgba(255, 49, 49, 0.7);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #ff3131;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .glitch-effect {
+            position: relative;
+            animation: glitch 5s infinite;
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            2% { transform: translate(-2px, 2px) }
+            4% { transform: translate(2px, -2px) }
+            6% { transform: translate(0) }
+            100% { transform: translate(0) }
+        }
+        
+        .skew-bg {
+            transform: skewY(-2deg);
+        }
+        
+        .skew-content {
+            transform: skewY(2deg);
+        }
+        
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        @keyframes neonGlow {
+            0% {
+                filter: drop-shadow(0 0 5px #ff3131) drop-shadow(0 0 10px #df8181);
+                opacity: 0.9;
+            }
+            25% {
+                filter: drop-shadow(0 0 12px #3a3a3a) drop-shadow(0 0 20px #ffffff);
+                opacity: 0.9;
+            }
+            50% {
+                filter: drop-shadow(0 0 12px #121212) drop-shadow(0 0 20px #ffffff);
+                opacity: 0.9;
+            }
+            75% {
+                filter: drop-shadow(0 0 5px #ff3131) drop-shadow(0 0 10px #df8181);
+                opacity: 0.9;
+            }
+            100% {
+                filter: drop-shadow(0 0 5px #3a3a3a) drop-shadow(0 0 10px #ffffff);
+                opacity: 0.9;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Loading Screen -->
+    <div id="loading-screen" style="position:fixed;z-index:9999;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#121212;">
+        <!-- Video Background -->
+        <video autoplay muted loop playsinline id="loading-bg-video" style="position:absolute;inset:0;width:100vw;height:100vh;object-fit:cover;z-index:0;">
+            <source src="assets/loading.mp4" type="video/mp4">
+        </video>
+        <!-- Loading Content -->
+        <div style="position:relative;z-index:2;width:100vw;height:100vh;display:flex;align-items:end;justify-content:end;">
+            <div style="width:100%;display:flex;align-items:center;justify-content:flex-end;padding:40px;">
+                <!-- Progress bar and percentage tightly together -->
+                <span style="color:#fff;font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;margin-right:24px;">LOADING</span>
+                <div style="flex:1;max-width:500px;display:flex;align-items:center;">
+                    <div style="flex:1;height:6px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:hidden;position:relative;">
+                        <div id="loading-bar" style="height:100%;width:0;background:#ff3131;transition:width 0.2s;border-radius:3px;"></div>
+                    </div>
+                    <span id="loading-percent" style="color:#fff;font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;margin-left:24px;min-width:60px;text-align:right;">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-rad-black text-white py-4 px-6 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold bebas tracking-wider text-white">
+                DRYSKATEBOARDS<span class="text-rad-red">.</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#boards" class="nav-link font-medium hover:text-rad-red transition-colors">BOARDS</a>
+                <a href="#apparel" class="nav-link font-medium hover:text-rad-red transition-colors">APPAREL</a>
+                <a href="#team" class="nav-link font-medium hover:text-rad-red transition-colors">TEAM</a>
+                <a href="#reviews" class="nav-link font-medium hover:text-rad-red transition-colors">REVIEWS</a>
+                <a href="#contact" class="nav-link font-medium hover:text-rad-red transition-colors">CONTACTS</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <a href="#" class="hover:text-rad-red transition-colors">
+                    <i class="fas fa-search"></i>
+                </a>
+                <a href="#" class="hover:text-rad-red transition-colors">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="#" class="hover:text-rad-red transition-colors relative">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="absolute -top-2 -right-2 bg-rad-red text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                </a>
+                <button id="mobile-menu-button" class="md:hidden hover:text-rad-red transition-colors">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 h-full w-4/5 bg-rad-black z-50 p-6">
+        <div class="flex justify-between items-center mb-8">
+            <a href="#" class="text-3xl font-bold bebas tracking-wider text-white">
+                DRYSKATEBOARDS<span class="text-rad-red">.</span>
+            </a>
+            <button id="close-menu" class="text-white hover:text-rad-red transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        <div class="flex flex-col space-y-6">
+            <a href="#boards" class="text-white font-medium hover:text-rad-red transition-colors text-lg">BOARDS</a>
+            <a href="#apparel" class="text-white font-medium hover:text-rad-red transition-colors text-lg">APPAREL</a>
+            <a href="#team" class="text-white font-medium hover:text-rad-red transition-colors text-lg">TEAM</a>
+            <a href="#reviews" class="text-white font-medium hover:text-rad-red transition-colors text-lg">REVIEWS</a>
+            <a href="#contact" class="text-white font-medium hover:text-rad-red transition-colors text-lg">CONTACTS</a>
+            <div class="pt-6 border-t border-gray-700">
+                <a href="#" class="text-white font-medium hover:text-rad-red transition-colors text-lg flex items-center">
+                    <i class="fas fa-user mr-3"></i> Account
+                </a>
+                <a href="#" class="text-white font-medium hover:text-rad-red transition-colors text-lg flex items-center mt-4">
+                    <i class="fas fa-shopping-cart mr-3"></i> Cart (3)
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden noise-bg">
+        <div class="absolute inset-0 z-0">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                    <pattern id="diagonalHatch" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                        <line x1="0" y1="0" x2="0" y2="10" style="stroke:rgba(255,49,49,0.2); stroke-width:1" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#diagonalHatch)" />
+            </svg>
+        </div>
+        
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                <source src="assets/bgVideo.mp4" type="video/mp4">
+                <!-- Optionally add a fallback image or message here -->
+            </video>
+            <!-- Overlay -->
+        <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 text-white mb-10 md:mb-0">
+                    <h1 class="text-6xl md:text-7xl font-black bebas mb-4 hero-text glitch-effect">
+                        BREAK<br>THE<br>CONCRETE
+                    </h1>
+                    <p class="text-xl mb-8 max-w-md">
+                        Premium skateboards and street apparel for those who live on the edge. Designed for rebels, built for performance.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#boards" class="border-2 border-rad-red hover:bg-rad-red hover:text-rad-black text-white font-bold py-3 px-8 rounded-sm transition-colors bebas tracking-wider text-xl">
+                            SHOP BOARDS
+                        </a>
+                        <a href="#apparel" class="border-2 border-white hover:bg-white hover:text-rad-black text-white font-bold py-3 px-8 rounded-sm transition-colors bebas tracking-wider text-xl">
+                            SHOP APPAREL
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 relative">
+                    <img src="assets/logoWhite.svg" alt="Logo Image" class="w-full h-auto rounded-lg" style="animation: neonGlow 3s infinite alternate;">
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white scroll-indicator">
+            <a href="#boards" class="flex flex-col items-center">
+                <span class="mb-2 text-sm">SCROLL</span>
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Featured Boards Section -->
+    <section id="boards" class="py-20 px-6 bg-white">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold bebas">FEATURED BOARDS</h2>
+                <a href="#" class="hidden md:block text-rad-black hover:text-rad-red transition-colors font-bold">
+                    VIEW ALL <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Board 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <rect x="10" y="30" width="280" height="40" rx="20" fill="#222" />
+                                <rect x="20" y="35" width="260" height="30" rx="15" fill="#333" />
+                                <text x="150" y="55" font-family="Arial" font-size="14" fill="white" text-anchor="middle">RADIKL STREET DECK</text>
+                                <circle cx="40" cy="80" r="10" fill="#ff3131" />
+                                <circle cx="260" cy="80" r="10" fill="#ff3131" />
+                                <circle cx="40" cy="20" r="10" fill="#ff3131" />
+                                <circle cx="260" cy="20" r="10" fill="#ff3131" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-rad-red text-white text-xs font-bold px-2 py-1">
+                            NEW
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Street Warrior Deck</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700">$89.99</p>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star-half-alt"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Board 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <rect x="10" y="30" width="280" height="40" rx="20" fill="#333" />
+                                <rect x="20" y="35" width="260" height="30" rx="15" fill="#444" />
+                                <text x="150" y="55" font-family="Arial" font-size="14" fill="white" text-anchor="middle">RADIKL PRO DECK</text>
+                                <circle cx="40" cy="80" r="10" fill="#39ff14" />
+                                <circle cx="260" cy="80" r="10" fill="#39ff14" />
+                                <circle cx="40" cy="20" r="10" fill="#39ff14" />
+                                <circle cx="260" cy="20" r="10" fill="#39ff14" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-rad-neon text-rad-black text-xs font-bold px-2 py-1">
+                            BEST SELLER
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Pro Series Deck</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700">$119.99</p>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Board 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <rect x="10" y="30" width="280" height="40" rx="20" fill="#111" />
+                                <rect x="20" y="35" width="260" height="30" rx="15" fill="#222" />
+                                <text x="150" y="55" font-family="Arial" font-size="14" fill="white" text-anchor="middle">RADIKL URBAN DECK</text>
+                                <circle cx="40" cy="80" r="10" fill="white" />
+                                <circle cx="260" cy="80" r="10" fill="white" />
+                                <circle cx="40" cy="20" r="10" fill="white" />
+                                <circle cx="260" cy="20" r="10" fill="white" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Urban Assault Deck</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700">$99.99</p>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-gray-300"><i class="fas fa-star"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Board 4 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <rect x="10" y="30" width="280" height="40" rx="20" fill="#444" />
+                                <rect x="20" y="35" width="260" height="30" rx="15" fill="#555" />
+                                <text x="150" y="55" font-family="Arial" font-size="14" fill="white" text-anchor="middle">RADIKL PARK DECK</text>
+                                <circle cx="40" cy="80" r="10" fill="#ff3131" />
+                                <circle cx="260" cy="80" r="10" fill="#ff3131" />
+                                <circle cx="40" cy="20" r="10" fill="#ff3131" />
+                                <circle cx="260" cy="20" r="10" fill="#ff3131" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-gray-800 text-white text-xs font-bold px-2 py-1">
+                            SALE
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Park Dominator Deck</h3>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-700"><span class="line-through text-gray-400 mr-2">$109.99</span> $79.99</p>
+                            </div>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="text-gray-300"><i class="fas fa-star"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center md:hidden">
+                <a href="#" class="text-rad-black hover:text-rad-red transition-colors font-bold">
+                    VIEW ALL BOARDS <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Banner -->
+    <section class="py-16 relative skew-bg bg-rad-red noise-bg">
+        <div class="container mx-auto px-6 skew-content">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-8 md:mb-0 text-white">
+                    <h2 class="text-3xl md:text-5xl font-bold bebas mb-4">JOIN THE DRY CREW</h2>
+                    <p class="text-lg max-w-md">Sign up for our newsletter and get 10% off your first order plus exclusive access to drops and events.</p>
+                </div>
+                <div class="w-full md:w-auto">
+                    <div class="flex flex-col md:flex-row">
+                        <input type="email" placeholder="Your email address" class="px-4 py-3 md:w-64 mb-3 md:mb-0 md:mr-2 focus:outline-none">
+                        <button class="bg-rad-black hover:bg-gray-900 text-white font-bold py-3 px-6 transition-colors bebas tracking-wider">
+                            SIGN UP
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Apparel Section -->
+    <section id="apparel" class="py-20 px-6 bg-gray-100">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold bebas">STREET APPAREL</h2>
+                <a href="#" class="hidden md:block text-rad-black hover:text-rad-red transition-colors font-bold">
+                    VIEW ALL <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <!-- Categories -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- Hoodies -->
+                <div class="relative overflow-hidden group rounded-lg shadow-lg h-80">
+                    <div class="absolute inset-0 bg-rad-black flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-1/2 h-1/2">
+                            <path d="M100,30 L130,50 L130,140 L70,140 L70,50 L100,30 Z" fill="#333" />
+                            <path d="M70,50 L50,70 L50,140 L70,140 Z" fill="#444" />
+                            <path d="M130,50 L150,70 L150,140 L130,140 Z" fill="#444" />
+                            <path d="M70,80 L130,80 L130,140 L70,140 Z" fill="#555" />
+                            <text x="100" y="110" font-family="Arial" font-size="14" fill="white" text-anchor="middle">HOODIE</text>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity group-hover:bg-opacity-60">
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-white bebas mb-2">HOODIES</h3>
+                            <a href="#" class="inline-block border-2 border-rad-red hover:bg-rad-red hover:text-rad-black text-white font-bold py-2 px-6 mt-4 rounded-sm transition-colors bebas tracking-wider">
+                                SHOP NOW
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tees -->
+                <div class="relative overflow-hidden group rounded-lg shadow-lg h-80">
+                    <div class="absolute inset-0 bg-rad-black flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-1/2 h-1/2">
+                            <path d="M100,40 L130,60 L130,140 L70,140 L70,60 L100,40 Z" fill="#333" />
+                            <path d="M70,60 L50,80 L70,80 Z" fill="#444" />
+                            <path d="M130,60 L150,80 L130,80 Z" fill="#444" />
+                            <text x="100" y="110" font-family="Arial" font-size="14" fill="white" text-anchor="middle">TEE</text>
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity group-hover:bg-opacity-60">
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-white bebas mb-2">TEES</h3>
+                            <a href="#" class="inline-block border-2 border-rad-red hover:bg-rad-red hover:text-rad-black text-white font-bold py-2 px-6 mt-4 rounded-sm transition-colors bebas tracking-wider">
+                                SHOP NOW
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Caps -->
+                <div class="relative overflow-hidden group rounded-lg shadow-lg h-80">
+                    <div class="absolute inset-0 bg-rad-black flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-1/2 h-1/2">
+                            <path d="M60,100 C60,70 100,70 140,100 L130,120 C100,100 70,100 70,120 Z" fill="#333" />
+                            <path d="M70,120 L130,120 L130,130 L70,130 Z" fill="#444" />
+                            <path d="M90,80 L110,80 L110,100 L90,100 Z" fill="#ff3131" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-opacity group-hover:bg-opacity-60">
+                        <div class="text-center">
+                            <h3 class="text-3xl font-bold text-white bebas mb-2">CAPS</h3>
+                            <a href="#" class="inline-block border-2 border-rad-red hover:bg-rad-red hover:text-rad-black text-white font-bold py-2 px-6 mt-4 rounded-sm transition-colors bebas tracking-wider">
+                                SHOP NOW
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Apparel -->
+            <h2 class="text-4xl md:text-5xl font-bold bebas">TRENDING NOW</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Apparel 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <path d="M100,40 L130,60 L130,140 L70,140 L70,60 L100,40 Z" fill="#222" />
+                                <path d="M70,60 L50,80 L70,80 Z" fill="#333" />
+                                <path d="M130,60 L150,80 L130,80 Z" fill="#333" />
+                                <text x="100" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle">RADIKL</text>
+                                <circle cx="100" cy="80" r="15" fill="#ff3131" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-rad-red text-white text-xs font-bold px-2 py-1">
+                            NEW
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Logo Tee - Black</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700">$34.99</p>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star-half-alt"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Apparel 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <path d="M100,30 L130,50 L130,140 L70,140 L70,50 L100,30 Z" fill="#333" />
+                                <path d="M70,50 L50,70 L50,140 L70,140 Z" fill="#444" />
+                                <path d="M130,50 L150,70 L150,140 L130,140 Z" fill="#444" />
+                                <path d="M70,80 L130,80 L130,140 L70,140 Z" fill="#555" />
+                                <text x="100" y="110" font-family="Arial" font-size="12" fill="white" text-anchor="middle">RADIKL</text>
+                                <path d="M85,60 L115,60 L115,70 L85,70 Z" fill="#39ff14" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-rad-neon text-rad-black text-xs font-bold px-2 py-1">
+                            BEST SELLER
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Street Hoodie - Gray</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700">$69.99</p>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Apparel 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <path d="M60,100 C60,70 100,70 140,100 L130,120 C100,100 70,100 70,120 Z" fill="#222" />
+                                <path d="M70,120 L130,120 L130,130 L70,130 Z" fill="#333" />
+                                <path d="M90,80 L110,80 L110,100 L90,100 Z" fill="#ff3131" />
+                                <text x="100" y="90" font-family="Arial" font-size="8" fill="white" text-anchor="middle">R</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Logo Snapback - Black/Red</h3>
+                        <div class="flex justify-between items-center">
+                            <p class="text-gray-700">$29.99</p>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-gray-300"><i class="fas fa-star"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Apparel 4 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+                    <div class="relative">
+                        <div class="bg-gray-100 h-64 flex items-center justify-center p-6">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                                <path d="M100,40 L130,60 L130,140 L70,140 L70,60 L100,40 Z" fill="#fff" stroke="#ddd" />
+                                <path d="M70,60 L50,80 L70,80 Z" fill="#eee" stroke="#ddd" />
+                                <path d="M130,60 L150,80 L130,80 Z" fill="#eee" stroke="#ddd" />
+                                <text x="100" y="100" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">RADIKL</text>
+                                <path d="M80,80 L120,80 L120,90 L80,90 Z" fill="#ff3131" />
+                            </svg>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-gray-800 text-white text-xs font-bold px-2 py-1">
+                            SALE
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Logo Tee - White</h3>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-700"><span class="line-through text-gray-400 mr-2">$34.99</span> $24.99</p>
+                            </div>
+                            <div class="flex">
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                                <span class="text-yellow-500"><i class="fas fa-star-half-alt"></i></span>
+                                <span class="text-gray-300"><i class="fas fa-star"></i></span>
+                            </div>
+                        </div>
+                        <button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors">
+                            ADD TO CART
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center md:hidden">
+                <a href="#" class="text-rad-black hover:text-rad-red transition-colors font-bold">
+                    VIEW ALL APPAREL <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section id="team" class="py-20 px-6 bg-rad-black text-white noise-bg">
+        <div class="container mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold bebas mb-12">MEET THE TEAM</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Team Member 1 -->
+                <div class="text-center">
+                    <div class="relative mb-6 overflow-hidden rounded-lg">
+                        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                            <rect width="300" height="300" fill="#333" />
+                            <circle cx="150" cy="100" r="50" fill="#444" />
+                            <rect x="100" y="150" width="100" height="150" fill="#444" />
+                            <rect x="70" y="180" width="30" height="100" fill="#444" />
+                            <rect x="200" y="180" width="30" height="100" fill="#444" />
+                            <rect x="120" y="200" width="60" height="20" fill="#ff3131" />
+                        </svg>
+                        <div class="absolute inset-0 bg-gradient-to-t from-rad-black to-transparent"></div>
+                    </div>
+                    <h3 class="text-xl font-bold bebas">HADEF ALHEBSI</h3>
+                    <p class="text-gray-400 mb-4">Founder and CEO</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="text-center">
+                    <div class="relative mb-6 overflow-hidden rounded-lg">
+                        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                            <rect width="300" height="300" fill="#333" />
+                            <circle cx="150" cy="100" r="50" fill="#444" />
+                            <rect x="100" y="150" width="100" height="150" fill="#444" />
+                            <rect x="70" y="180" width="30" height="100" fill="#444" />
+                            <rect x="200" y="180" width="30" height="100" fill="#444" />
+                            <rect x="120" y="200" width="60" height="20" fill="#39ff14" />
+                        </svg>
+                        <div class="absolute inset-0 bg-gradient-to-t from-rad-black to-transparent"></div>
+                    </div>
+                    <h3 class="text-xl font-bold bebas">JOHN DOE</h3>
+                    <p class="text-gray-400 mb-4">Street Style Designer</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="text-center">
+                    <div class="relative mb-6 overflow-hidden rounded-lg">
+                        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                            <rect width="300" height="300" fill="#333" />
+                            <circle cx="150" cy="100" r="50" fill="#444" />
+                            <rect x="100" y="150" width="100" height="150" fill="#444" />
+                            <rect x="70" y="180" width="30" height="100" fill="#444" />
+                            <rect x="200" y="180" width="30" height="100" fill="#444" />
+                            <rect x="120" y="200" width="60" height="20" fill="#fff" />
+                        </svg>
+                        <div class="absolute inset-0 bg-gradient-to-t from-rad-black to-transparent"></div>
+                    </div>
+                    <h3 class="text-xl font-bold bebas">TYLER JACKSON</h3>
+                    <p class="text-gray-400 mb-4">Pro Skater</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-twitch"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="text-center">
+                    <div class="relative mb-6 overflow-hidden rounded-lg">
+                        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                            <rect width="300" height="300" fill="#333" />
+                            <circle cx="150" cy="100" r="50" fill="#444" />
+                            <rect x="100" y="150" width="100" height="150" fill="#444" />
+                            <rect x="70" y="180" width="30" height="100" fill="#444" />
+                            <rect x="200" y="180" width="30" height="100" fill="#444" />
+                            <rect x="120" y="200" width="60" height="20" fill="#ff3131" />
+                        </svg>
+                        <div class="absolute inset-0 bg-gradient-to-t from-rad-black to-transparent"></div>
+                    </div>
+                    <h3 class="text-xl font-bold bebas">SOFIA MARTINEZ</h3>
+                    <p class="text-gray-400 mb-4">Vert Champion</p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Add this directly after the closing </section> of the team section, inside the black background area -->
+<section class="py-20 px-6 bg-rad-black text-white noise-bg">
+    <div class="container mx-auto">
+        <div class="flex flex-col md:flex-row md:items-stretch md:space-x-16">
+            <!-- Left: All Text Content and Button -->
+            <div class="w-full md:w-1/2 flex flex-col justify-center">
+                <h2 class="text-4xl md:text-5xl font-bold bebas mb-4">ABOUT US</h2>
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-4" style="font-family:'Montserrat',sans-serif;">Born to Ride, Built to Last</h2>
+                <p class="text-gray-300 mb-8 text-lg">
+                    Founded in the heart of the UAE's Desert, DrySkateboards is a rider-owned brand dedicated to delivering the best in skateboards and streetwear. Every product is designed and tested by real skaters for real skaters. We believe in quality, creativity, and community.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="flex items-start">
+                        <span class="text-rad-red text-2xl mr-3"><i class="fas fa-cogs"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white">Premium Materials</h4>
+                            <p class="text-gray-400 text-sm">Only the best wood, trucks, and fabrics for maximum performance and durability.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-rad-red text-2xl mr-3"><i class="fas fa-users"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white">Community Driven</h4>
+                            <p class="text-gray-400 text-sm">We support local skate scenes and events. Join our crew and ride with us!</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-rad-red text-2xl mr-3"><i class="fas fa-lightbulb"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white">Innovative Design</h4>
+                            <p class="text-gray-400 text-sm">From bold graphics to functional apparel, we push the boundaries of skate style.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-rad-red text-2xl mr-3"><i class="fas fa-shipping-fast"></i></span>
+                        <div>
+                            <h4 class="font-bold text-white">Fast Shipping</h4>
+                            <p class="text-gray-400 text-sm">Get your gear quickly and hit the streets in no time.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="#boards" class="inline-block border-2 border-rad-red hover:bg-rad-red hover:text-rad-black text-white font-bold py-2 px-6 mt-4 rounded-sm transition-colors bebas tracking-wider">
+                        SHOP NOW
+                    </a>
+                </div>
+            </div>
+            <!-- Right: SVG/Image Only -->
+            <div class="w-full md:w-1/2 flex items-center justify-center mt-12 md:mt-0">
+                <div class="bg-white flex items-center justify-center rounded-lg w-full md:w-auto h-full" style="min-height:340px;">
+                    <svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="160" cy="160" r="130" fill="#ff3100"/>
+                        <rect x="60" y="150" width="200" height="20" rx="10" fill="#181818"/>
+                        <circle cx="70" cy="160" r="18" fill="#00cfff"/>
+                        <circle cx="250" cy="160" r="18" fill="#00cfff"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+  
+
+    <!-- Reviews Section -->
+        <section id="reviews" class="py-20 px-6 bg-white">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold bebas mb-12 text-center">WHAT SKATERS ARE SAYING</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Review 1 -->
+                    <div class="bg-gray-100 p-8 rounded-lg relative">
+                        <div class="text-rad-red text-6xl absolute -top-4 left-4 opacity-20">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="flex mb-4">
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                        </div>
+                        <p class="text-gray-700 mb-6">
+                            "The Pro Series Deck is the best board I've ever ridden. Perfect pop, great durability, and the design is fire. Dry Skateboards are changing the game!"
+                        </p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-gray-600 font-bold">JM</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Jake Miller</h4>
+                                <p class="text-gray-500 text-sm">Pro Skater</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Review 2 -->
+                    <div class="bg-gray-100 p-8 rounded-lg relative">
+                        <div class="text-rad-red text-6xl absolute -top-4 left-4 opacity-20">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="flex mb-4">
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star-half-alt"></i></span>
+                        </div>
+                        <p class="text-gray-700 mb-6">
+                            "The Street Hoodie is super comfortable and looks sick. I wear it everywhere and get compliments all the time. Shipping was fast too!"
+                        </p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-gray-600 font-bold">AL</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Alyssa Lee</h4>
+                                <p class="text-gray-500 text-sm">Customer</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Review 3 -->
+                    <div class="bg-gray-100 p-8 rounded-lg relative">
+                        <div class="text-rad-red text-6xl absolute -top-4 left-4 opacity-20">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <div class="flex mb-4">
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                            <span class="text-yellow-500"><i class="fas fa-star"></i></span>
+                        </div>
+                        <p class="text-gray-700 mb-6">
+                            "Dry Skateboard's customer service is top notch. Had an issue with my order and they fixed it immediately. The Urban Assault Deck is worth every penny!"
+                        </p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-gray-600 font-bold">RD</span>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Ryan Davis</h4>
+                                <p class="text-gray-500 text-sm">Skate Shop Owner</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+    <!-- Instagram Feed Section -->
+    <section class="py-16 px-6 bg-gray-100">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold bebas">@DRYSKATEBOARDS</h2>
+                <a href="https://www.instagram.com/dryskateboards/" class="text-rad-black hover:text-rad-red transition-colors font-bold flex items-center">
+                    FOLLOW US <i class="fab fa-instagram ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- IG Post 1 -->
+                <div class="relative overflow-hidden group aspect-square">
+                    <div class="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            <rect width="100" height="100" fill="#333" />
+                            <circle cx="50" cy="40" r="15" fill="#444" />
+                            <rect x="35" y="55" width="30" height="45" fill="#444" />
+                            <rect x="25" y="65" width="10" height="25" fill="#444" />
+                            <rect x="65" y="65" width="10" height="25" fill="#444" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+                        <div class="text-white flex space-x-4">
+                            <span><i class="fas fa-heart"></i> 423</span>
+                            <span><i class="fas fa-comment"></i> 18</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IG Post 2 -->
+                <div class="relative overflow-hidden group aspect-square">
+                    <div class="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            <rect width="100" height="100" fill="#444" />
+                            <rect x="10" y="40" width="80" height="20" rx="10" fill="#333" />
+                            <circle cx="20" cy="50" r="5" fill="#ff3131" />
+                            <circle cx="80" cy="50" r="5" fill="#ff3131" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+                        <div class="text-white flex space-x-4">
+                            <span><i class="fas fa-heart"></i> 512</span>
+                            <span><i class="fas fa-comment"></i> 24</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IG Post 3 -->
+                <div class="relative overflow-hidden group aspect-square">
+                    <div class="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            <rect width="100" height="100" fill="#222" />
+                            <path d="M20,80 L50,20 L80,80 Z" fill="#ff3131" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+                        <div class="text-white flex space-x-4">
+                            <span><i class="fas fa-heart"></i> 387</span>
+                            <span><i class="fas fa-comment"></i> 9</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IG Post 4 -->
+                <div class="relative overflow-hidden group aspect-square">
+                    <div class="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            <rect width="100" height="100" fill="#333" />
+                            <circle cx="50" cy="50" r="30" fill="#39ff14" />
+                            <circle cx="50" cy="50" r="20" fill="#222" />
+                            <circle cx="50" cy="50" r="10" fill="#39ff14" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+                        <div class="text-white flex space-x-4">
+                            <span><i class="fas fa-heart"></i> 621</span>
+                            <span><i class="fas fa-comment"></i> 32</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IG Post 5 -->
+                <div class="relative overflow-hidden group aspect-square">
+                    <div class="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            <rect width="100" height="100" fill="#444" />
+                            <rect x="20" y="20" width="60" height="60" fill="#333" />
+                            <rect x="30" y="30" width="40" height="40" fill="#222" />
+                            <rect x="40" y="40" width="20" height="20" fill="#ff3131" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+                        <div class="text-white flex space-x-4">
+                            <span><i class="fas fa-heart"></i> 489</span>
+                            <span><i class="fas fa-comment"></i> 15</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IG Post 6 -->
+                <div class="relative overflow-hidden group aspect-square">
+                    <div class="absolute inset-0 bg-gray-300 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                            <rect width="100" height="100" fill="#222" />
+                            <path d="M10,50 C10,30 30,10 50,10 C70,10 90,30 90,50 C90,70 70,90 50,90 C30,90 10,70 10,50 Z" fill="none" stroke="#ff3131" stroke-width="5" />
+                        </svg>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
+                        <div class="text-white flex space-x-4">
+                            <span><i class="fas fa-heart"></i> 543</span>
+                            <span><i class="fas fa-comment"></i> 27</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  <section id="contact" class="py-20 px-6 bg-white">
+    <div class="container mx-auto">
+        <div class="mb-12 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold bebas mb-2">CONTACT US</h2>
+            <p class="text-gray-500 text-lg">Questions? Feedback? Want to collaborate? Reach out to us!</p>
+        </div>
+        <div class="flex flex-col md:flex-row md:space-x-16">
+            <!-- Image + Contact Info -->
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <div class="space-y-15">
+                    <!-- Address -->
+                    <div class="flex items-center mb-10">
+                        <img src="assets/location.svg" alt="location" class="w-16 h-16 object-contain rounded-lg mr-4">
+                        <div>
+                            <h3 class="text-2xl font-bold bebas mb-2">Address</h3>
+                            <p class="text-gray-500 text-base">Abu Dhabi, UAE</p>
+                        </div>
+                    </div>
+                    <!-- Email -->
+                    <div class="flex items-center mb-10">
+                        <img src="assets/email.svg" alt="email" class="w-16 h-16 object-contain rounded-lg mr-4">
+                        <div>
+                            <h3 class="text-2xl font-bold bebas mb-2">Email</h3>
+                            <p class="text-gray-500 text-base">info@dryskateboards.com</p>
+                        </div>
+                    </div>
+                    <!-- Phone -->
+                    <div class="flex items-center">
+                        <img src="assets/phone.svg" alt="phone" class="w-16 h-16 object-contain rounded-lg mr-4">
+                        <div>
+                            <h3 class="text-2xl font-bold bebas mb-2">Phone</h3>
+                            <p class="text-gray-500 text-base">+971 50 123 4567</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Contact Form -->
+            <div class="md:w-1/2">
+                <form class="bg-gray-50 rounded-lg shadow-lg p-8 flex flex-col space-y-6">
+                    <div>
+                        <label for="contact-name" class="block text-gray-700 font-semibold mb-2">Name</label>
+                        <input id="contact-name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-rad-red" placeholder="Your Name" required>
+                    </div>
+                    <div>
+                        <label for="contact-email" class="block text-gray-700 font-semibold mb-2">Email</label>
+                        <input id="contact-email" type="email" class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-rad-red" placeholder="you@email.com" required>
+                    </div>
+                    <div>
+                        <label for="contact-message" class="block text-gray-700 font-semibold mb-2">Message</label>
+                        <textarea id="contact-message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-rad-red" placeholder="Type your message..." required></textarea>
+                    </div>
+                    <button type="submit" class="inline-block border-2 border-rad-red hover:bg-rad-red hover:white text-rad-black font-bold py-3 px-8 mt-4 rounded-sm transition-colors bebas tracking-wider text-lg">
+                        SEND MESSAGE
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Footer -->
+    <footer class="bg-rad-black text-white py-16 px-6 noise-bg">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Brand Column -->
+                <div>
+                    <a href="#" class="text-3xl font-bold bebas tracking-wider text-white inline-block mb-6">
+                        DRYSKATEBOARDS<span class="text-rad-red">.</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">
+                        Premium skateboards and street apparel for those who live on the edge. Designed for rebels, built for performance.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-rad-red transition-colors">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Shop Column -->
+                <div>
+                    <h3 class="text-xl font-bold bebas mb-6">SHOP</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#boards" class="text-gray-400 hover:text-rad-red transition-colors">Skateboards</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Wheels & Trucks</a></li>
+                        <li><a href="#apparel" class="text-gray-400 hover:text-rad-red transition-colors">Apparel</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Accessories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Sale Items</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Gift Cards</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company Column -->
+                <div>
+                    <h3 class="text-xl font-bold bebas mb-6">COMPANY</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">About Us</a></li>
+                        <li><a href="#team" class="text-gray-400 hover:text-rad-red transition-colors">Team</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Press</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support Column -->
+                <div>
+                    <h3 class="text-xl font-bold bebas mb-6">SUPPORT</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Shipping & Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Warranty</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-rad-red transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 mb-4 md:mb-0">
+                    &copy; 2025 DRYSKATEBOARDS. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top Button -->
+
+        <button id="backToTop" class="fixed bottom-8 right-8 bg-rad-red text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition-colors z-50 hidden" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+         // Loading Screen Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            const loadingScreen = document.getElementById('loading-screen');
+            const loadingBoard = document.getElementById('loading-board');
+            const loadingPercent = document.getElementById('loading-percent');
+            let percent = 0;
+            const boardMax = 260; // px, width of container minus board width
+
+            function animateLoading() {
+                percent += Math.random() * 7 + 2; // random speed for realism
+                if (percent > 100) percent = 100;
+                loadingPercent.textContent = Math.floor(percent) + '%';
+                loadingBoard.style.left = (percent / 100 * boardMax) + 'px';
+                if (percent < 100) {
+                    setTimeout(animateLoading, 30);
+                } else {
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => loadingScreen.style.display = 'none', 400);
+                    }, 350);
+                }
+            }
+            animateLoading();
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenu = document.getElementById('close-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTop.classList.remove('hidden');
+            } else {
+                backToTop.classList.add('hidden');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
