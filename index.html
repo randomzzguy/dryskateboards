@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DRY SKATEBOARDS | Boards & Street Apparel</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -1295,3 +1296,254 @@ function animateLoading() {
     </script>
 </body>
 </html>
+=======
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dry Skateboards - Soon</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="icon" type="image/svg+xml" href="assets/logoWhite.svg">
+    
+    <!-- Custom Vintage Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Font */
+        body {
+            background-image: url('assets/bg.png');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            color: #F4F1EA;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            padding: 2rem;
+            font-family: 'Bungee', cursive;
+            cursor: url('assets/cursor.png') 8 8, auto; /* Smaller cursor */
+        }
+
+        /* Custom Clickable Cursor */
+        a, button, input {
+            cursor: url('assets/cursorClick.png') 8 8, pointer;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        /* Neon Glow Effect on Logo */
+        @keyframes neonGlow {
+            0% { filter: drop-shadow(0 0 5px #ffbd59); }
+            50% { filter: drop-shadow(0 0 15px #ffbd59); }
+            100% { filter: drop-shadow(0 0 5px #ffbd59); }
+        }
+        .logo {
+            width: 400px;
+            animation: neonGlow 2s infinite alternate;
+        }    
+
+        h1, h3, p, button {
+            color: #FFF;
+        }
+
+        /* Apply Font to Specific Headings */
+        .title {
+            font-family: 'Bungee', cursive;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .countdown-title {
+            font-family: 'Bungee', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+        
+        input[type="email"] {
+            border: 2px solid #F4F1EA;
+            padding: 0.5rem;
+            font-size: 1rem;
+            width: 80%;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #5D4037;
+        }
+
+        .cta {
+            border: none;
+            width: 50%;
+            text-align: center;
+            cursor: pointer;
+            background-color: #ffbd59;
+            color: #FFF;
+            margin: 1rem auto;
+            display: block;
+        }
+        .cta:hover {
+            background-color: #A65E41;
+        }
+
+        .social a {
+            margin: 0 10px;
+            font-size: 0.85rem;
+            color: #F4F1EA;
+            text-decoration: none;
+        }
+        .social a:hover { color: #ffbd59; }
+
+        /* Space Between Countdown & Text */
+        #countdown-timer {
+            font-size: 2rem;
+            color: #ffbd59;
+            margin-bottom: 20px;
+        }
+
+        /* Trick-Loading Bar with Grinding Skater */
+        .loading-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .loading-bar-label {
+            font-size: 1rem;
+            margin: 0 10px;
+            color: #ffbd59;
+        }
+
+        .loading-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+            position: relative;
+            height: 40px; /* Increased height for skater visibility */
+            display: flex;
+            align-items: center;
+        }
+
+        .loading-skater {
+            position: absolute;
+            left: 0;
+            top: 1px;
+            width: 38px; /* Larger skater */
+            height: auto;
+            animation: skaterMove 3s linear forwards;
+        }
+
+        .loading-bar-inner {
+            width: 0%;
+            height: 100%;
+            background-color: #ffbd59;
+            border-radius: 5px;
+            animation: barFill 3s linear forwards;
+        }
+
+        @keyframes skaterMove {
+            0% { left: 0%; }
+            100% { left: 70%; } /* Stops at 70% */
+        }
+
+        @keyframes barFill {
+            0% { width: 0%; }
+            100% { width: 70%; } /* Matches skater movement */
+        }
+
+        /* Smooth Fade-in Notification */
+        .notification {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000; /* Ensures it's above everything */
+            left: 50%;
+            bottom: 50px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            font-size: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="assets/logoWhite.svg" alt="Dry Skateboards Logo" class="logo">
+        <h1 class="title">New decks, fresh threads—<br>coming soon!</h1>
+
+        <div class="loading-bar-container">
+            <span class="loading-bar-label">0%</span>
+            <div class="loading-bar">
+                <img src="assets/skater.png" alt="Skateboarder" class="loading-skater">
+                <div class="loading-bar-inner"></div>
+            </div>
+            <span class="loading-bar-label">100%</span>
+        </div>
+        
+        <br><br>
+
+        <!-- Countdown Timer -->
+        <h3 class="countdown-title">Launching In:</h3>
+        <div id="countdown-timer"></div>
+
+        <p>Get notified below!</p>
+
+        <form onsubmit="storeEmail(event)">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="submit" class="cta">Notify Me</button>
+        </form>
+
+        <div class="social">
+            <a href="https://instagram.com/dryskateboards" target="_blank">📷 @dryskateboards</a>
+            <a href="#" onclick="copyEmailToClipboard()">📧 Email Us</a>
+        </div>
+    </div>
+
+    <div id="email-notification" class="notification">Email successfully submitted!</div>
+    <div id="copy-notification" class="notification">E-mail successfully copied to clipboard!</div>
+
+    <script>
+        function showNotification(id) {
+            const notification = document.getElementById(id);
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 100);
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 500);
+            }, 3000);
+        }
+
+        function copyEmailToClipboard() {
+            navigator.clipboard.writeText("dryskateboards@proton.me").then(() => {
+                showNotification("copy-notification");
+            });
+        }
+
+        async function storeEmail(event) {
+            event.preventDefault();
+            let emailInput = document.getElementById('email').value;
+
+            if (emailInput.includes('@')) {
+                showNotification("email-notification");
+                document.getElementById('email').value = '';
+            }
+        }
+
+        setInterval(() => {
+            document.getElementById("countdown-timer").textContent = "Countdown running...";
+        }, 1000);
+    </script>
+</body>
+</html>
+>>>>>>> 0e6d50512d5e0d2109910251f64efa46d6b271e3
