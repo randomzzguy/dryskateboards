@@ -1,0 +1,9 @@
+<svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" class="w-full">
+    <rect x="10" y="30" width="280" height="40" rx="20" fill="#444" />
+    <rect x="20" y="35" width="260" height="30" rx="15" fill="#555" />
+    <text x="150" y="55" font-family="Arial" font-size="14" fill="white" text-anchor="middle">RADIKL PARK DECK</text>
+    <circle cx="40" cy="80" r="10" fill="#ff3131" />
+    <circle cx="260" cy="80" r="10" fill="#ff3131" />
+    <circle cx="40" cy="20" r="10" fill="#ff3131" />
+    <circle cx="260" cy="20" r="10" fill="#ff3131" />
+</svg>

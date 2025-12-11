@@ -1,0 +1,9 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full">
+    <path d="M100,30 L130,50 L130,140 L70,140 L70,50 L100,30 Z" fill="#333" />
+    <path d="M70,50 L50,70 L50,140 L70,140 Z" fill="#444" />
+    <path d="M130,50 L150,70 L150,140 L130,140 Z" fill="#444" />
+    <path d="M70,80 L130,80 L130,140 L70,140 Z" fill="#555" />
+    <text x="100" y="110" font-family="Arial" font-size="12" fill="white"
+        text-anchor="middle">RADIKL</text>
+    <path d="M85,60 L115,60 L115,70 L85,70 Z" fill="#39ff14" />
+</svg>

@@ -1,0 +1,7 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full">
+    <path d="M60,100 C60,70 100,70 140,100 L130,120 C100,100 70,100 70,120 Z" fill="#222" />
+    <path d="M70,120 L130,120 L130,130 L70,130 Z" fill="#333" />
+    <path d="M90,80 L110,80 L110,100 L90,100 Z" fill="#ff3131" />
+    <text x="100" y="90" font-family="Arial" font-size="8" fill="white"
+        text-anchor="middle">R</text>
+</svg>
