@@ -28,10 +28,8 @@ function initAuthListeners() {
         userIcon.addEventListener('click', (e) => {
             e.preventDefault();
             if (user) {
-                // If logged in, maybe go to profile or logout?
-                // For now, let's just log out for simplicity of demo
-                const confirmLogout = confirm('You are logged in. Do you want to log out?');
-                if (confirmLogout) signOut();
+                // If logged in, go to profile
+                window.location.href = 'profile.html';
             } else {
                 openModal();
             }

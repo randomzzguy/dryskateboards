@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - DRY Skateboards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js" type="module"></script>
+    <script src="js/cart.js" type="module"></script> <!-- To keep cart functional -->
+    <script src="js/auth.js" type="module"></script> <!-- Auth check -->
+
+    <style>
+        .bebas {
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+    <!-- Navbar Reused -->
+    <nav class="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-100">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html"
+                    class="text-3xl font-bold tracking-widest text-rad-black bebas hover:text-rad-red transition-colors">
+                    DRY<span class="text-rad-red">.</span>
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="index.html"
+                        class="font-bold text-sm tracking-widest hover:text-rad-red transition-colors">HOME</a>
+                    <a href="index.html#products"
+                        class="font-bold text-sm tracking-widest hover:text-rad-red transition-colors">SHOP</a>
+                    <!-- Reuse user icon logic from auth.js -->
+                    <a href="#" id="nav-user-icon" class="relative group">
+                        <i class="fas fa-user hover:text-rad-red transition-colors text-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-6 py-12">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl bebas text-gray-900 mb-8 border-b-2 border-red-500 inline-block pb-2">My Account</h1>
+
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+
+                <!-- Sidebar Tabs -->
+                <aside class="w-full md:w-64 bg-gray-50 border-r border-gray-100">
+                    <div class="p-6 text-center border-b border-gray-100">
+                        <div
+                            class="w-16 h-16 bg-gray-200 rounded-full mx-auto flex items-center justify-center text-gray-500 text-2xl mb-3">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <p class="font-bold text-gray-800 break-words" id="profile-email">Loading...</p>
+                    </div>
+                    <nav class="flex flex-col">
+                        <button onclick="switchTab('orders')" id="tab-orders"
+                            class="px-6 py-4 text-left font-bold text-gray-600 hover:bg-gray-100 hover:text-red-500 border-l-4 border-transparent active-tab">
+                            <i class="fas fa-box-open mr-3 w-5 text-center"></i> Order History
+                        </button>
+                        <button onclick="switchTab('details')" id="tab-details"
+                            class="px-6 py-4 text-left font-bold text-gray-600 hover:bg-gray-100 hover:text-red-500 border-l-4 border-transparent">
+                            <i class="fas fa-address-card mr-3 w-5 text-center"></i> Account Details
+                        </button>
+                        <button id="logout-btn"
+                            class="px-6 py-4 text-left font-bold text-gray-600 hover:bg-gray-100 hover:text-red-500 border-l-4 border-transparent mt-auto">
+                            <i class="fas fa-sign-out-alt mr-3 w-5 text-center"></i> Sign Out
+                        </button>
+                    </nav>
+                </aside>
+
+                <!-- Content Area -->
+                <div class="flex-1 p-8">
+
+                    <!-- Orders Tab -->
+                    <div id="content-orders" class="animate-fade-in">
+                        <h2 class="text-2xl bebas text-gray-800 mb-6">Order History</h2>
+                        <div id="orders-list" class="space-y-4">
+                            <p class="text-gray-500">Loading orders...</p>
+                        </div>
+                    </div>
+
+                    <!-- Details Tab -->
+                    <div id="content-details" class="hidden animate-fade-in">
+                        <h2 class="text-2xl bebas text-gray-800 mb-6">Account Details</h2>
+                        <form id="profile-form" class="space-y-4 max-w-lg">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Full Name</label>
+                                <input type="text" id="prof-name"
+                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Address Line 1</label>
+                                <input type="text" id="prof-address"
+                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">City</label>
+                                    <input type="text" id="prof-city"
+                                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">State/Province</label>
+                                    <input type="text" id="prof-state"
+                                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-500">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">ZIP / Postal Code</label>
+                                    <input type="text" id="prof-zip"
+                                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-1">Phone</label>
+                                    <input type="tel" id="prof-phone"
+                                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-red-500">
+                                </div>
+                            </div>
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="bg-rad-black text-white font-bold py-2 px-6 rounded hover:bg-gray-800 transition-colors uppercase tracking-wider text-sm shadow-lg">
+                                    Save Changes
+                                </button>
+                                <span id="save-msg"
+                                    class="ml-3 text-green-600 font-bold hidden opacity-0 transition-opacity duration-300">Saved!</span>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Basic Footer Reused -->
+    <footer class="bg-rad-black text-white py-8 mt-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 DRY Skateboards. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Styles for tabs -->
+    <style>
+        .active-tab {
+            background-color: #f3f4f6;
+            color: #ef4444;
+            /* red-500 */
+            border-left-color: #ef4444;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+
+    <script type="module" src="js/profile.js"></script>
+</body>
+
+</html>

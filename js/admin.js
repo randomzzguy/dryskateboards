@@ -323,7 +323,21 @@ async function renderOrders(container) {
 }
 
 async function renderProducts(container) {
-    // Reusing products table structure
+    window.openProductModal = openProductModal;
+    window.closeProductModal = closeProductModal;
+    window.deleteProduct = deleteProduct;
+    window.editProduct = editProduct;
+
+    // Attach form listener if not already attached (idempotent check not really needed if we attach once on module load, but we are inside render)
+    // Actually, attaching to document body or checking existence is safer.
+    // Let's attach listener to the form element we just added in HTML
+    const form = document.getElementById('product-form');
+    // Remove old listener to avoid dupes (naive way: clone node, or just use onsubmit attribute? No, let's use a flag)
+    if (form && !form.dataset.listenerAttached) {
+        form.addEventListener('submit', handleProductSave);
+        form.dataset.listenerAttached = 'true';
+    }
+
     const { data: products } = await supabaseClient
         .from('products')
         .select('*')
@@ -332,21 +346,134 @@ async function renderProducts(container) {
     container.innerHTML = `
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-lg font-bold text-white">Inventory</h3>
-            <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-bold">ADD PRODUCT</button>
+            <button onclick="openProductModal()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-bold">ADD PRODUCT</button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            ${products.map(p => `
-                <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 flex gap-4">
+            ${products.map(p => {
+        const isOnSale = p.sale_price && p.sale_price < p.price;
+        const priceDisplay = isOnSale
+            ? `<span class="text-gray-500 line-through text-xs mr-1">AED ${p.price}</span> <span class="text-red-400 font-bold">AED ${p.sale_price}</span>`
+            : `<span class="text-gray-300">AED ${p.price}</span>`;
+
+        return `
+                <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 flex gap-4 relative group">
                      <img src="${p.image_url}" class="w-20 h-20 object-contain bg-white rounded">
-                     <div>
-                        <h4 class="font-bold text-white">${p.name}</h4>
-                        <p class="text-sm text-gray-400 mb-2">Stock: ${p.stock}</p>
-                        <span class="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">${p.category}</span>
+                     <div class="flex-1">
+                        <h4 class="font-bold text-white leading-tight mb-1">${p.name}</h4>
+                        <div class="mb-1">${priceDisplay}</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs bg-gray-700 px-2 py-1 rounded text-gray-300">Stock: ${p.stock}</span>
+                            <span class="text-xs text-gray-500 uppercase">${p.category}</span>
+                        </div>
+                     </div>
+                     
+                     <!-- Actions Overlay -->
+                     <div class="absolute inset-0 bg-black/80 hidden group-hover:flex items-center justify-center gap-3 rounded-lg transition-all">
+                        <button onclick="editProduct(${p.id})" class="text-white hover:text-blue-400 border border-white hover:border-blue-400 rounded px-3 py-1 text-sm font-bold">
+                            EDIT
+                        </button>
+                        <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-400 border border-red-500 hover:border-red-400 rounded px-3 py-1 text-sm font-bold">
+                            DELETE
+                        </button>
                      </div>
                 </div>
-            `).join('')}
+            `}).join('')}
         </div>
     `;
+
+    // Cache for editing
+    window._latestProducts = products;
+}
+
+// --- CRUD Helpers --- //
+
+function openProductModal(isEdit = false) {
+    const modal = document.getElementById('product-modal');
+    const title = document.getElementById('modal-title');
+    const form = document.getElementById('product-form');
+
+    if (!isEdit) {
+        title.textContent = 'Add New Product';
+        form.reset();
+        document.getElementById('prod-id').value = '';
+    }
+
+    modal.classList.remove('hidden');
+}
+
+function closeProductModal() {
+    document.getElementById('product-modal').classList.add('hidden');
+}
+
+function editProduct(id) {
+    const product = window._latestProducts.find(p => p.id === id);
+    if (!product) return;
+
+    document.getElementById('img-preview')?.remove(); // Cleanup previous previews if any
+
+    document.getElementById('modal-title').textContent = 'Edit Product';
+    document.getElementById('prod-id').value = product.id;
+    document.getElementById('prod-name').value = product.name;
+    document.getElementById('prod-desc').value = product.description || '';
+    document.getElementById('prod-price').value = product.price;
+    document.getElementById('prod-sale-price').value = product.sale_price || '';
+    document.getElementById('prod-stock').value = product.stock;
+    document.getElementById('prod-category').value = product.category;
+    document.getElementById('prod-image').value = product.image_url || '';
+
+    openProductModal(true);
+}
+
+async function handleProductSave(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const id = document.getElementById('prod-id').value;
+    const payload = {
+        name: document.getElementById('prod-name').value,
+        description: document.getElementById('prod-desc').value,
+        price: parseFloat(document.getElementById('prod-price').value),
+        sale_price: document.getElementById('prod-sale-price').value ? parseFloat(document.getElementById('prod-sale-price').value) : null,
+        stock: parseInt(document.getElementById('prod-stock').value),
+        category: document.getElementById('prod-category').value,
+        image_url: document.getElementById('prod-image').value,
+    };
+
+    try {
+        let error;
+        if (id) {
+            // Update
+            ({ error } = await supabaseClient.from('products').update(payload).eq('id', id));
+        } else {
+            // Create
+            ({ error } = await supabaseClient.from('products').insert([payload]));
+        }
+
+        if (error) throw error;
+
+        closeProductModal();
+        loadModule('products'); // Refresh view
+    } catch (err) {
+        alert('Error saving product: ' + err.message);
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+async function deleteProduct(id) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+
+    try {
+        const { error } = await supabaseClient.from('products').delete().eq('id', id);
+        if (error) throw error;
+        loadModule('products'); // Refresh view
+    } catch (err) {
+        alert('Error deleting: ' + err.message);
+    }
 }
 
 async function renderDiscounts(container) {

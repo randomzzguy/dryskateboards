@@ -8,7 +8,8 @@ async function fetchProducts() {
     try {
         const { data, error } = await supabaseClient
             .from('products')
-            .select('*');
+            .select('*')
+            .order('id', { ascending: true }); // Ensure consistent ordering
 
         if (error) {
             console.error('Error fetching products:', error);
@@ -17,16 +18,49 @@ async function fetchProducts() {
 
         allProducts = data; // Store in cache
         renderProducts(data);
+
+        // Setup Realtime Subscription
+        setupRealtimeSubscription();
+
     } catch (err) {
         console.error('Unexpected error:', err);
     }
+}
+
+function setupRealtimeSubscription() {
+    supabaseClient
+        .channel('public:products')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, (payload) => {
+            console.log('Realtime update received:', payload);
+            handleRealtimeUpdate(payload);
+        })
+        .subscribe();
+}
+
+function handleRealtimeUpdate(payload) {
+    const { eventType, new: newRecord, old: oldRecord } = payload;
+
+    if (eventType === 'INSERT') {
+        allProducts.push(newRecord);
+    } else if (eventType === 'UPDATE') {
+        const index = allProducts.findIndex(p => p.id === newRecord.id);
+        if (index !== -1) {
+            allProducts[index] = newRecord;
+        }
+    } else if (eventType === 'DELETE') {
+        allProducts = allProducts.filter(p => p.id !== oldRecord.id);
+    }
+
+    // Sort to keep consistent order (id-based)
+    allProducts.sort((a, b) => a.id - b.id);
+    renderProducts(allProducts);
 }
 
 function renderProducts(products) {
     const boardsContainer = document.getElementById('boards-container');
     const apparelContainer = document.getElementById('apparel-container');
 
-    // Clear loading indicators
+    // Clear containers
     if (boardsContainer) boardsContainer.innerHTML = '';
     if (apparelContainer) apparelContainer.innerHTML = '';
 
@@ -64,25 +98,43 @@ function createProductCard(product) {
         }
     }
 
-    // Badge and button logic based on stock_status
+    // Badge and button logic
     let badgeHtml = '';
     let buttonHtml = '';
-    const stockStatus = product.stock_status || 'in_stock';
 
-    if (stockStatus === 'sold_out') {
+    // Check stock status OR stock count
+    const isSoldOut = product.stock_status === 'sold_out' || product.stock <= 0;
+    const isComingSoon = product.stock_status === 'coming_soon';
+
+    if (isSoldOut) {
         badgeHtml = '<div class="absolute top-4 left-4 bg-gray-800 text-white text-xs font-bold px-3 py-1 bebas tracking-wider">SOLD OUT</div>';
         buttonHtml = '<button class="w-full bg-gray-400 text-white font-bold py-2 px-4 mt-4 cursor-not-allowed bebas tracking-wider" disabled>SOLD OUT</button>';
-    } else if (stockStatus === 'coming_soon') {
+    } else if (isComingSoon) {
         badgeHtml = '<div class="absolute top-4 left-4 bg-rad-neon text-rad-black text-xs font-bold px-3 py-1 bebas tracking-wider">COMING SOON</div>';
         buttonHtml = '<button class="w-full bg-rad-red hover:bg-red-600 text-white font-bold py-2 px-4 mt-4 transition-colors bebas tracking-wider" onclick="notifyMe(' + product.id + ')">NOTIFY ME</button>';
     } else {
         // In stock - check for other badges
         if (product.stock < 10 && product.stock > 0) {
             badgeHtml = '<div class="absolute top-4 left-4 bg-rad-red text-white text-xs font-bold px-3 py-1 bebas tracking-wider">LOW STOCK</div>';
+        } else if (product.sale_price && product.sale_price < product.price) {
+            badgeHtml = '<div class="absolute top-4 left-4 bg-rad-neon text-rad-black text-xs font-bold px-3 py-1 bebas tracking-wider">ON SALE</div>';
         } else if (product.rating >= 4.9) {
             badgeHtml = '<div class="absolute top-4 left-4 bg-rad-neon text-rad-black text-xs font-bold px-3 py-1 bebas tracking-wider">BEST SELLER</div>';
         }
         buttonHtml = '<button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors bebas tracking-wider" onclick="addToCartHandler(' + product.id + ')">ADD TO CART</button>';
+    }
+
+    // Price Display Logic
+    let priceHtml = '';
+    if (product.sale_price && product.sale_price < product.price) {
+        priceHtml = `
+            <div class="flex flex-col items-start">
+                <span class="text-gray-500 line-through text-sm">AED ${product.price}</span>
+                <span class="text-rad-red font-bold text-xl">AED ${product.sale_price}</span>
+            </div>
+        `;
+    } else {
+        priceHtml = `<p class="text-gray-700 font-bold text-lg">AED ${product.price}</p>`;
     }
 
     // Default image if none provided
@@ -100,7 +152,7 @@ function createProductCard(product) {
             <h3 class="text-xl font-bold mb-2">${product.name}</h3>
             <p class="text-gray-600 text-sm mb-3 line-clamp-2">${product.description || ''}</p>
             <div class="flex justify-between items-center">
-                <p class="text-gray-700 font-bold text-lg">AED ${product.price}</p>
+                ${priceHtml}
                 <div class="flex">${starsHtml}</div>
             </div>
             ${buttonHtml}
