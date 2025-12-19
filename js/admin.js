@@ -4,20 +4,37 @@ import { supabaseClient } from './config.js';
 // Auth & Initialization
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', async () => {
+// ==========================================
+// Auth & Initialization
+// ==========================================
+
+// Run init when DOM is ready (modules are deferred, so DOM might already be ready)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+async function init() {
+    console.log('🔐 Admin JS initializing...');
+
     // Determine current page
-    const isLoginPage = window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/admin/');
+    const isLoginPage = window.location.pathname.includes('index.html') ||
+        window.location.pathname.endsWith('/admin') ||
+        window.location.pathname.endsWith('/admin/');
+
     const isDashboard = window.location.pathname.includes('dashboard.html');
+
+    console.log('Page detection:', { isLoginPage, isDashboard, path: window.location.pathname });
 
     // Check Session
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (isLoginPage) {
+        initLogin(); // Always attach listeners first
         if (session) {
             // Already logged in, check if admin
             checkAdminAndRedirect(session);
-        } else {
-            initLogin();
         }
     } else if (isDashboard) {
         if (!session) {
@@ -34,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     }
-});
+}
 
 async function verifyAdmin(email) {
     const { data, error } = await supabaseClient
