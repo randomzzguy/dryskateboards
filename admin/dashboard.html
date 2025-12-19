@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - DRY Skateboards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        .bebas {
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-100 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
+        <div class="h-16 flex items-center justify-center border-b border-gray-700">
+            <h1 class="text-2xl bebas tracking-wider text-white">DRY <span class="text-red-600">ADMIN</span></h1>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 px-2">
+                <li>
+                    <button onclick="loadModule('overview')"
+                        class="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors group">
+                        <i class="fas fa-chart-line w-6 text-center text-gray-400 group-hover:text-red-500"></i>
+                        <span class="ml-3 font-medium">Overview</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="loadModule('orders')"
+                        class="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors group">
+                        <i class="fas fa-shopping-bag w-6 text-center text-gray-400 group-hover:text-red-500"></i>
+                        <span class="ml-3 font-medium">Orders</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="loadModule('live-carts')"
+                        class="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors group">
+                        <i class="fas fa-shopping-cart w-6 text-center text-gray-400 group-hover:text-red-500"></i>
+                        <span class="ml-3 font-medium">Live Carts</span>
+                        <span id="live-cart-count"
+                            class="ml-auto bg-red-600 text-white py-0.5 px-2 rounded-full text-xs hidden">0</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="loadModule('products')"
+                        class="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors group">
+                        <i class="fas fa-box-open w-6 text-center text-gray-400 group-hover:text-red-500"></i>
+                        <span class="ml-3 font-medium">Products</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="loadModule('discounts')"
+                        class="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors group">
+                        <i class="fas fa-tags w-6 text-center text-gray-400 group-hover:text-red-500"></i>
+                        <span class="ml-3 font-medium">Discounts</span>
+                    </button>
+                </li>
+                <li>
+                    <button onclick="loadModule('newsletter')"
+                        class="w-full flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md transition-colors group">
+                        <i class="fas fa-envelope w-6 text-center text-gray-400 group-hover:text-red-500"></i>
+                        <span class="ml-3 font-medium">Newsletter</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="p-4 border-t border-gray-700">
+            <div class="flex items-center mb-4">
+                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-xs font-bold">A</div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-white" id="admin-email">Admin</p>
+                    <p class="text-xs text-gray-400">Super User</p>
+                </div>
+            </div>
+            <button id="logout-btn"
+                class="w-full flex items-center justify-center px-4 py-2 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-800 hover:bg-gray-700 transition-colors">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-gray-900">
+        <!-- Top Bar -->
+        <header class="h-16 bg-gray-800 border-b border-gray-700 flex items-center justify-between px-6">
+            <h2 id="page-title" class="text-xl font-bold text-white">Dashboard Overview</h2>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-400 hover:text-white relative">
+                    <i class="fas fa-bell"></i>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <a href="../index.html" target="_blank"
+                    class="text-gray-400 hover:text-white text-sm flex items-center gap-2">
+                    <i class="fas fa-external-link-alt"></i> View Store
+                </a>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div id="content-area" class="flex-1 overflow-y-auto p-6">
+            <!-- Dynamic Content loads here -->
+            <div class="flex items-center justify-center h-full">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../js/admin.js"></script>
+</body>
+
+</html>

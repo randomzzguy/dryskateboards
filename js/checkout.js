@@ -41,7 +41,7 @@ function renderOrderSummary() {
                 <p class="text-gray-500 text-xs">Size: Default</p>
             </div>
             <div class="text-right">
-                <p class="font-bold">$${(item.price * item.quantity).toFixed(2)}</p>
+                <p class="font-bold">AED ${(item.price * item.quantity).toFixed(2)}</p>
             </div>
         </div>
     `).join('');
@@ -49,9 +49,9 @@ function renderOrderSummary() {
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const total = subtotal + SHIPPING_COST;
 
-    summarySubtotal.textContent = '$' + subtotal.toFixed(2);
-    summaryShipping.textContent = '$' + SHIPPING_COST.toFixed(2);
-    summaryTotal.textContent = '$' + total.toFixed(2);
+    summarySubtotal.textContent = 'AED ' + subtotal.toFixed(2);
+    summaryShipping.textContent = 'AED ' + SHIPPING_COST.toFixed(2);
+    summaryTotal.textContent = 'AED ' + total.toFixed(2);
 }
 
 async function handlePlaceOrder(e) {
@@ -104,15 +104,77 @@ async function handlePlaceOrder(e) {
     showMessage('');
 
     // Prepare Order Data
+    // Discount Logic
+    const discountInput = document.getElementById('discount-code');
+    const discountCode = discountInput ? discountInput.value.trim().toUpperCase() : null;
+    let appliedDiscount = 0;
+
+    // Calculate initial totals
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const total = subtotal + SHIPPING_COST;
+    let total = subtotal + SHIPPING_COST;
+
+    // Validate Discount if provided
+    if (discountCode) {
+        try {
+            const { data: codeData, error: codeError } = await supabaseClient
+                .from('discount_codes')
+                .select('*')
+                .eq('code', discountCode)
+                .eq('active', true)
+                .single();
+
+            if (codeError || !codeData) {
+                showMessage('Invalid discount code', 'error');
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.textContent = 'PLACE ORDER';
+                return;
+            }
+
+            // check uses
+            if (codeData.max_uses && codeData.uses >= codeData.max_uses) {
+                showMessage('Discount code fully redeemed', 'error');
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.textContent = 'PLACE ORDER';
+                return;
+            }
+
+            // Apply Discount
+            if (codeData.type === 'percentage') {
+                appliedDiscount = subtotal * (codeData.value / 100);
+            } else {
+                appliedDiscount = codeData.value;
+            }
+
+            // Increment usage count (optimistic)
+            await supabaseClient.rpc('increment_discount_usage', { code_id: codeData.id });
+            // fallback if RPC doesn't exist: 
+            // await supabaseClient.from('discount_codes').update({ uses: codeData.uses + 1 }).eq('id', codeData.id);
+            // Stick to update for now as RPC might not be created.
+            await supabaseClient
+                .from('discount_codes')
+                .update({ uses: codeData.uses + 1 })
+                .eq('id', codeData.id);
+
+        } catch (err) {
+            console.error('Discount validation error:', err);
+            // Continue without discount or stop? Let's stop to be safe.
+            showMessage('Error validating discount', 'error');
+            placeOrderBtn.disabled = false;
+            placeOrderBtn.textContent = 'PLACE ORDER';
+            return;
+        }
+    }
+
+    total = Math.max(0, total - appliedDiscount);
 
     // Create Order in Supabase
     const orderData = {
         user_email: email,
         total_amount: total,
         status: 'paid', // Simulating successful payment
-        items: cart
+        items: cart,
+        discount_code: discountCode,
+        discount_amount: appliedDiscount
         // Note: shipping details are collected but not stored in this version
         // created_at is auto
     };

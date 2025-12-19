@@ -169,9 +169,57 @@ function updateQuantity(productId, change) {
     }
 }
 
+// Session Management for Cart Sync
+let cartSessionId = localStorage.getItem('cart_session_id');
+if (!cartSessionId) {
+    cartSessionId = crypto.randomUUID();
+    localStorage.setItem('cart_session_id', cartSessionId);
+}
+
+// Debounce helper
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 function saveCart() {
     localStorage.setItem('dry_cart', JSON.stringify(cart));
+    syncCartToSupabase(); // Fire and forget (debounced)
 }
+
+// Sync cart to Supabase for Admin Live View
+const syncCartToSupabase = debounce(async () => {
+    // Basic payload
+    const payload = {
+        session_id: cartSessionId,
+        items: cart,
+        updated_at: new Date().toISOString()
+    };
+
+    // Attempt to add user email if logged in
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session && session.user) {
+        payload.user_email = session.user.email;
+    }
+
+    try {
+        const { error } = await supabaseClient
+            .from('carts')
+            .upsert(payload, { onConflict: 'session_id' });
+
+        if (error) console.error('Error syncing cart:', error);
+    } catch (err) {
+        console.error('Failed to sync cart:', err);
+    }
+}, 1000); // Wait 1 second after last change before saving
+
 
 function renderCart() {
     // Update Badge
@@ -183,7 +231,7 @@ function renderCart() {
 
     // Update Totals
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    cartTotalEl.textContent = '$' + totalAmount.toFixed(2);
+    cartTotalEl.textContent = 'AED ' + totalAmount.toFixed(2);
 
     // Render Items
     if (cart.length === 0) {
@@ -201,7 +249,7 @@ function renderCart() {
             <img src="${item.image_url || 'https://placehold.co/100'}" alt="${item.name}" class="w-20 h-20 object-contain bg-white rounded-md border border-gray-200">
             <div class="flex-1">
                 <h3 class="font-bold text-sm leading-tight mb-1">${item.name}</h3>
-                <p class="text-rad-red font-bold">$${item.price}</p>
+                <p class="text-rad-red font-bold">AED ${item.price}</p>
                 <div class="flex items-center mt-2 gap-3">
                     <div class="flex items-center border border-gray-300 rounded overflow-hidden">
                         <button onclick="updateQuantity(${item.id}, -1)" class="px-2 py-1 hover:bg-gray-200">-</button>
