@@ -167,11 +167,19 @@ async function handleSignup(e) {
         return;
     }
 
+    // Verify hCaptcha
+    const captchaToken = hcaptcha.getResponse();
+    if (!captchaToken) {
+        showMessage('Please complete the security check.', 'error');
+        return;
+    }
+
     showMessage('Creating account...', 'success');
 
     const { data, error } = await supabaseClient.auth.signUp({
         email,
         password,
+        options: { captchaToken }
     });
 
     if (error) {

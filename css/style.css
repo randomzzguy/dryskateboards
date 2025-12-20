@@ -173,3 +173,4 @@ body {
 .carousel-img.active {
     display: block;
 }
+.clip-path-slant { clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); }

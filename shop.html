@@ -201,7 +201,15 @@
 
         // Initialize when products are ready (products.js should fire an event or we check)
         document.addEventListener('productsLoaded', () => {
-            applyFilters();
+            // Check URL params for category
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryParam = urlParams.get('category');
+
+            if (categoryParam) {
+                filterShop(categoryParam);
+            } else {
+                applyFilters(); // Default to all
+            }
         });
     </script>
 </body>
