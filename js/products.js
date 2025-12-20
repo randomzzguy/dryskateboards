@@ -77,13 +77,13 @@ function renderHomeProducts(products) {
     const apparelContainer = document.getElementById('apparel-container');
 
     if (boardsContainer) {
-        // Show ONLY featured boards on homepage
-        const featuredBoards = products.filter(p => p.category === 'boards' && p.is_featured);
+        // Show ALL featured products on homepage
+        const featuredProducts = products.filter(p => p.is_featured);
 
-        if (featuredBoards.length > 0) {
-            boardsContainer.innerHTML = featuredBoards.map(p => createProductCard(p)).join('');
+        if (featuredProducts.length > 0) {
+            boardsContainer.innerHTML = featuredProducts.map(p => createProductCard(p)).join('');
         } else {
-            boardsContainer.innerHTML = '<div class="col-span-full text-center text-gray-400 italic">No featured boards at the moment. Check the Shop!</div>';
+            boardsContainer.innerHTML = '<div class="col-span-full text-center text-gray-400 italic">No featured products at the moment. Check the Shop!</div>';
         }
     }
 
