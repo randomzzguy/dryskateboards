@@ -259,7 +259,7 @@ function createProductCard(product) {
         } else if (product.rating >= 4.9) {
             badgeHtml = '<div class="absolute top-4 left-4 bg-rad-neon text-rad-black text-xs font-bold px-3 py-1 bebas tracking-wider">BEST SELLER</div>';
         }
-        buttonHtml = '<button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors bebas tracking-wider" onclick="addToCartHandler(' + product.id + ')">ADD TO CART</button>';
+        buttonHtml = '<button class="w-full bg-rad-black hover:bg-gray-900 text-white font-bold py-2 px-4 mt-4 transition-colors bebas tracking-wider" onclick="addToCartHandler(' + product.id + ', event)">ADD TO CART</button>';
     }
 
     // Price Display Logic
@@ -303,7 +303,10 @@ function createProductCard(product) {
 }
 
 // Global handler for the onclick attribute
-window.addToCartHandler = (id) => {
+window.addToCartHandler = (id, event) => {
+    if (event) {
+        event.stopPropagation();
+    }
     const product = allProducts.find(p => p.id === id);
     if (product) {
         addItemToCart(product);

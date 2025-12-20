@@ -1,10 +1,10 @@
-# DRY SKATEBOARDS
+# DRYSKATEBOARDS
 
 Premium skateboards and street apparel - Abu Dhabi, UAE
 
 ## 🛹 Live Website
 
-This repository powers the DRY Skateboards e-commerce website.
+This repository powers the DRYSKATEBOARDS e-commerce website.
 
 ## 📧 Contact
 

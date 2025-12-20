@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop All - DRY SKATEBOARDS</title>
+    <title>Shop All - DRYSKATEBOARDS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;700&display=swap"
@@ -38,11 +38,10 @@
     <nav class="bg-rad-black text-white py-4 px-6 sticky top-0 z-40 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <a href="index.html" class="text-3xl font-bold bebas tracking-wider text-white">
-                DRY<span class="text-rad-red">.</span>
+                DRYSHOP<span class="text-rad-red">.</span>
             </a>
             <div class="flex items-center space-x-6">
                 <a href="index.html" class="font-bold hover:text-rad-red transition-colors text-sm">HOME</a>
-                <a href="index.html#contact" class="font-bold hover:text-rad-red transition-colors text-sm">CONTACT</a>
                 <a href="#" id="open-cart-btn" class="hover:text-rad-red transition-colors relative">
                     <i class="fas fa-shopping-cart"></i>
                     <span
@@ -112,17 +111,56 @@
     <div id="product-detail-modal-container"></div>
 
     <!-- Cart Drawer (Reused) -->
-    <div id="cart-drawer"
-        class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
-        <!-- Content injected by cart.js -->
+    <!-- Cart Drawer -->
+    <div id="cart-drawer" class="fixed inset-0 z-[100] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-rad-black bg-opacity-70 backdrop-blur-sm transition-opacity" id="cart-backdrop">
+        </div>
+
+        <!-- Drawer Content -->
+        <div class="absolute top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 translate-x-full"
+            id="cart-content">
+            <div class="flex flex-col h-full">
+                <!-- Header -->
+                <div
+                    class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-rad-black text-white">
+                    <h2 class="text-2xl font-bold bebas tracking-wide">YOUR CART</h2>
+                    <button id="close-cart-drawer" class="text-white hover:text-rad-red transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items -->
+                <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <!-- Items will be injected here -->
+                    <div class="text-center text-gray-500 mt-10">
+                        <p class="mb-4">Your cart is empty.</p>
+                        <button onclick="closeCart()" class="text-rad-red font-bold hover:underline">Start
+                            Shopping</button>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="border-t border-gray-200 p-6 bg-gray-50">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-600 font-bold">Subtotal</span>
+                        <span id="cart-total" class="text-2xl font-bold text-rad-black">AED 0.00</span>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-6 text-center">Shipping & taxes calculated at checkout.</p>
+                    <button id="checkout-btn"
+                        class="w-full bg-rad-red hover:bg-red-600 text-white font-bold py-4 transition-colors shadow-lg text-lg tracking-wider bebas">
+                        PROCEED TO CHECKOUT
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
 
     <!-- Footer -->
     <footer class="bg-rad-black text-white py-12">
         <div class="container mx-auto text-center">
-            <h3 class="text-2xl font-bold bebas mb-4">DRY SKATEBOARDS.</h3>
-            <p class="text-gray-500">Est. 2024</p>
+            <h3 class="text-2xl font-bold bebas mb-4">DRYSKATEBOARDS.</h3>
+            <p class="text-gray-500">Est. 2025</p>
         </div>
     </footer>
 

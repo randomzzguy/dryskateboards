@@ -32,16 +32,16 @@ serve(async (req) => {
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        from: 'DRY Skateboards <noreply@dryskateboards.com>',
+        from: 'DRYSKATEBOARDS <noreply@dryskateboards.com>',
         to: [record.email],
-        subject: '🎉 Welcome to DRY Skateboards - Here\'s Your 10% Off!',
+        subject: '🎉 Welcome to DRYSKATEBOARDS - Here\'s Your 10% Off!',
         html: `
           <!DOCTYPE html>
           <html>
           <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Welcome to DRY Skateboards</title>
+            <title>Welcome to DRYSKATEBOARDS</title>
           </head>
           <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f8f8f8;">
             <table role="presentation" style="width: 100%; border-collapse: collapse;">
@@ -53,7 +53,7 @@ serve(async (req) => {
                     <tr>
                       <td style="padding: 40px 30px; background-color: #121212; text-align: center;">
                         <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: bold; letter-spacing: 2px;">
-                          DRY SKATEBOARDS<span style="color: #ff3131;">.</span>
+                          DRYSKATEBOARDS<span style="color: #ff3131;">.</span>
                         </h1>
                       </td>
                     </tr>
@@ -65,7 +65,7 @@ serve(async (req) => {
                           Welcome to the Crew! 🛹
                         </h2>
                         <p style="margin: 0 0 20px 0; color: #666666; font-size: 16px; line-height: 1.6;">
-                          Thanks for subscribing to DRY Skateboards! We're stoked to have you join our community of riders.
+                          Thanks for subscribing to DRYSKATEBOARDS! We're stoked to have you join our community of riders.
                         </p>
                         <p style="margin: 0 0 20px 0; color: #666666; font-size: 16px; line-height: 1.6;">
                           As a welcome gift, here's your exclusive <strong>10% discount code</strong>:
@@ -110,7 +110,7 @@ serve(async (req) => {
                     <tr>
                       <td style="padding: 30px; background-color: #f8f8f8; text-align: center; border-top: 1px solid #e0e0e0;">
                         <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
-                          DRY Skateboards | Abu Dhabi, UAE
+                          DRYSKATEBOARDS | Abu Dhabi, UAE
                         </p>
                         <p style="margin: 0 0 10px 0; color: #999999; font-size: 12px;">
                           <a href="https://instagram.com/dryskateboards" style="color: #ff3131; text-decoration: none;">Instagram</a> | 

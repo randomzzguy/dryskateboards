@@ -145,9 +145,26 @@ export function addItemToCart(product) {
 
     saveCart();
     renderCart();
-    openCart();
+    // openCart();
+    showToast(`${product.name.toUpperCase()} ADDED TO CART`);
+}
 
-    // Optional: Show toast
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-5 right-5 bg-rad-black text-white px-6 py-4 rounded shadow-2xl z-[150] transform transition-all duration-300 translate-y-10 opacity-0 flex items-center gap-3 border-l-4 border-rad-neon';
+    toast.innerHTML = `<i class="fas fa-check-circle text-rad-neon text-xl"></i> <span class="font-bold bebas tracking-wider text-lg">${message}</span>`;
+    document.body.appendChild(toast);
+
+    // Animate in
+    requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+    });
+
+    // Remove after 3s
+    setTimeout(() => {
+        toast.classList.add('translate-y-10', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 function removeFromCart(productId) {
